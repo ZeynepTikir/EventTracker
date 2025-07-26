@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="6dp"
+    android:layout_marginVertical="4dp"
+    android:layout_marginHorizontal="8dp">
+
+<LinearLayout
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="horizontal"
+android:padding="12dp"
+android:gravity="center_vertical">
+
+<!-- Sol ikon -->
+<ImageView
+    android:id="@+id/eventIcon"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
+    android:layout_marginEnd="8dp"
+    app:srcCompat="@drawable/ic_event"
+    app:tint="@color/textcolor"/>
+
+<!-- Metin ve alt bilgiler -->
+<LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/eventName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event Name"
+        android:textColor="@color/textcolor"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:layout_marginBottom="2dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/eventType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type"
+            android:textColor="@color/textcolor"
+            android:textSize="13sp"
+            android:layout_marginEnd="20dp" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            app:srcCompat="@drawable/ic_notify"
+            app:tint="#D5A82B"
+            android:layout_marginEnd="4dp" />
+
+        <TextView
+            android:id="@+id/eventTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textColor="@color/textcolor"
+            android:textSize="13sp" />
+    </LinearLayout>
+</LinearLayout>
+
+<!-- Sağdaki checkbox -->
+<CheckBox
+    android:id="@+id/eventChecker"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:button="@drawable/selector_checkbox"
+    android:padding="6dp" />
+</LinearLayout>
+
+    </androidx.cardview.widget.CardView>
