@@ -138,7 +138,7 @@ public class NewHabitFragment extends Fragment {
 
         habitViewModel.insert(habit);
         Toast.makeText(getContext(), "Alışkanlık kaydedildi", Toast.LENGTH_SHORT).show();
-        clearFields();
+        //clearFields();
         requireActivity().getSupportFragmentManager().popBackStack();
     }
 

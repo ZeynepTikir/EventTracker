@@ -1,7 +1,6 @@
 package com.example.eventtracker.ui.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,9 @@ import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.ui.AddSelectionBottomSheet;
 import com.example.eventtracker.ui.adapter.EventAdapter;
 import com.example.eventtracker.ui.adapter.EventItem;
+import com.example.eventtracker.ui.habit.EditHabitBottomSheetFragment;
 import com.example.eventtracker.ui.habit.NewHabitFragment;
+import com.example.eventtracker.ui.task.EditTaskBottomSheetFragment;
 import com.example.eventtracker.ui.task.NewTaskFragment;
 import com.example.eventtracker.viewmodel.HabitViewModel;
 import com.example.eventtracker.viewmodel.TaskViewModel;
@@ -88,6 +89,18 @@ public class HomeFragment extends Fragment {
 
         setupViewModels();
 
+        // edit eventx
+        eventAdapter.setOnItemClickListener(item -> {
+            if (item.getType() == EventItem.TYPE_TASK) {
+                EditTaskBottomSheetFragment editTaskFragment = new EditTaskBottomSheetFragment(item.getTask());
+                editTaskFragment.show(getParentFragmentManager(), "EditTaskBottomSheet");
+            } else if (item.getType() == EventItem.TYPE_HABIT) {
+                EditHabitBottomSheetFragment editHabitFragment = new EditHabitBottomSheetFragment(item.getHabit());
+                editHabitFragment.show(getParentFragmentManager(), "EditHabitBottomSheet");
+            }
+        });
+
+        // checkbox
         eventAdapter.setOnCheckedChangeListener((item, isChecked) -> {
             if (item.getType() == EventItem.TYPE_TASK) {
                 taskViewModel.updateTaskChecked(item.getTask().getId(), isChecked);

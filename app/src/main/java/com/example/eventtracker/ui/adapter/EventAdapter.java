@@ -23,14 +23,22 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.eventList = eventList;
     }
 
+    //event check için
     public interface OnCheckedChangeListener {
         void onCheckedChanged(EventItem item, boolean isChecked);
     }
-
     private OnCheckedChangeListener checkedChangeListener;
-
     public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
         this.checkedChangeListener = listener;
+    }
+
+    // event edit için
+    public interface OnItemClickListener {
+        void onItemClick(EventItem item);
+    }
+    private OnItemClickListener listener;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
 
@@ -57,6 +65,14 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             holder.type.setText("Habit");
         }
 
+        //edit için set yapısı
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(item);
+            }
+        });
+
+        //checkbox için set yapısı
         holder.checked.setOnCheckedChangeListener(null);
         holder.checked.setChecked(item.isChecked());
 
