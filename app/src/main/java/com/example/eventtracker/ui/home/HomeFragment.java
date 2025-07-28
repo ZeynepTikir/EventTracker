@@ -88,6 +88,16 @@ public class HomeFragment extends Fragment {
 
         setupViewModels();
 
+        eventAdapter.setOnCheckedChangeListener((item, isChecked) -> {
+            if (item.getType() == EventItem.TYPE_TASK) {
+                taskViewModel.updateTaskChecked(item.getTask().getId(), isChecked);
+            } else {
+                habitViewModel.updateHabitChecked(item.getHabit().getId(), isChecked);
+            }
+        });
+
+
+
         return view;
     }
 
@@ -103,20 +113,20 @@ public class HomeFragment extends Fragment {
         habitViewModel.getAllHabits().observe(getViewLifecycleOwner(), habits -> {
             currentHabits = habits;
             updateEventList();for (HabitEntity habit : habits) {
-                Log.d("HabitDebug", "Habit adı: " + habit.getName());
+                //Log.d("HabitDebug", "Habit adı: " + habit.getName());
                 boolean[] days = habit.getDays();
 
                 if (days != null && days.length == 7) {
                     StringBuilder sb = new StringBuilder();
-                    String[] dayNames = {"Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"};
+                    //String[] dayNames = {"Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"};
 
                     for (int i = 0; i < 7; i++) {
-                        sb.append(dayNames[i]).append(": ").append(days[i] ? "✔️" : "❌").append("  ");
+                        //sb.append(dayNames[i]).append(": ").append(days[i] ? "✔️" : "❌").append("  ");
                     }
 
-                    Log.d("HabitDebug", "Aktif günler -> " + sb.toString());
+                    //Log.d("HabitDebug", "Aktif günler -> " + sb.toString());
                 } else {
-                    Log.d("HabitDebug", "Gün bilgisi eksik!");
+                    //Log.d("HabitDebug", "Gün bilgisi eksik!");
                 }
             }
         });
@@ -127,19 +137,19 @@ public class HomeFragment extends Fragment {
         String today = getTodayDate(); // "yyyy-MM-dd"
 
         // Bugünün task'leri
-        android.util.Log.d("HomeFragment", "----- Tasks for today (" + today + ") -----");
+        //android.util.Log.d("HomeFragment", "----- Tasks for today (" + today + ") -----");
         for (TaskEntity task : currentTasks) {
             if (task.getDate() != null && task.getDate().equals(today)) {
                 eventList.add(new EventItem(task));
-                android.util.Log.d("HomeFragment", "Task: " + task.getName() + " at " + task.getTime());
+                //android.util.Log.d("HomeFragment", "Task: " + task.getName() + " at " + task.getTime());
             }
         }
 
         // Bugünkü habit'ler
-        android.util.Log.d("HomeFragment", "----- Habits -----");
+        //android.util.Log.d("HomeFragment", "----- Habits -----");
         for (HabitEntity habit : currentHabits) {
             boolean show = habit.isScheduledForToday();
-            android.util.Log.d("HomeFragment", "Habit: " + habit.getName() + ", showToday: " + show);
+            //android.util.Log.d("HomeFragment", "Habit: " + habit.getName() + ", showToday: " + show);
             if (show) {
                 eventList.add(new EventItem(habit));
             }
@@ -158,7 +168,7 @@ public class HomeFragment extends Fragment {
             return compareTimeStrings(time1, time2);
         });
 
-        android.util.Log.d("HomeFragment", "Total events to show: " + eventList.size());
+        //android.util.Log.d("HomeFragment", "Total events to show: " + eventList.size());
 
         eventAdapter.notifyDataSetChanged();
     }

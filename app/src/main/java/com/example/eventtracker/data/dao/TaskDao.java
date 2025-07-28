@@ -27,4 +27,10 @@ public interface TaskDao {
 
     @Query("SELECT * FROM tasks WHERE date = :date ORDER BY time ASC")
     LiveData<List<TaskEntity>> getTasksByDate(String date);
+
+
+    @Query("UPDATE tasks SET checked = :checked WHERE id = :id")
+    void updateChecked(int id, boolean checked);
+
+
 }

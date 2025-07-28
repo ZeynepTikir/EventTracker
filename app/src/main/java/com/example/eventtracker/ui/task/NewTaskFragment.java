@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,7 +70,7 @@ public class NewTaskFragment extends Fragment {
             task.setDate(date);
             task.setTime(time);
             task.setIcon("ic_task"); // varsayılan bir icon adı
-            task.setChecker(false);  // başlangıçta işaretli değil
+            task.setChecked(false);  // başlangıçta işaretli değil
 
             taskViewModel.insert(task);
 

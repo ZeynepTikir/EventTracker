@@ -7,8 +7,6 @@ import androidx.room.TypeConverters;
 
 import com.example.eventtracker.data.Converters;
 
-import java.time.LocalDate;
-
 @Entity(tableName = "habits")
 @TypeConverters(Converters.class)
 public class HabitEntity {
@@ -19,7 +17,8 @@ public class HabitEntity {
     private String name;
     private String icon;
     private String time;   // Format: "HH:mm"
-    private boolean checker;
+    @ColumnInfo(name = "checked")
+    private boolean checked;
 
     private boolean[] days; // Pzt:0, Salı:1, ..., Pazar:6
 
@@ -57,12 +56,12 @@ public class HabitEntity {
         this.time = time;
     }
 
-    public boolean isChecker() {
-        return checker;
+    public boolean isChecked() {
+        return checked;
     }
 
-    public void setChecker(boolean checker) {
-        this.checker = checker;
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     public boolean[] getDays() {

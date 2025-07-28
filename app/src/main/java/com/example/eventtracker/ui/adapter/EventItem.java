@@ -47,11 +47,13 @@ public class EventItem {
     }
 
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
+    public boolean isChecked() {
+        return type == TYPE_TASK ? task.isChecked() : habit.isChecked();
     }
 
-    public boolean isChecked() {
-        return checked;
+    public void setChecked(boolean checked) {
+        if (type == TYPE_TASK) task.setChecked(checked);
+        else habit.setChecked(checked);
     }
+
 }

@@ -30,6 +30,11 @@ public class TaskRepository {
         executorService.execute(() -> taskDao.update(task));
     }
 
+    public void updateChecked(int id, boolean checked) {
+        executorService.execute(() -> taskDao.updateChecked(id, checked));
+    }
+
+
     public void delete(TaskEntity task) {
         executorService.execute(() -> taskDao.delete(task));
     }

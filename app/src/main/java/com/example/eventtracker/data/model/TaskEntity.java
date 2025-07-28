@@ -1,5 +1,6 @@
 package com.example.eventtracker.data.model;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -13,7 +14,16 @@ public class TaskEntity {
     private String icon;
     private String time;  // Format: "HH:mm"
     private String date;  // Format: "yyyy-MM-dd"
-    private boolean checker;
+    @ColumnInfo(name = "checked")
+    private boolean checked;
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
     // Getter & Setter
     public int getId() {
@@ -56,11 +66,5 @@ public class TaskEntity {
         this.date = date;
     }
 
-    public boolean isChecker() {
-        return checker;
-    }
 
-    public void setChecker(boolean checker) {
-        this.checker = checker;
-    }
 }

@@ -19,6 +19,10 @@ public interface HabitDao {
     @Delete
     void delete(HabitEntity habit);
 
+    @Query("UPDATE habits SET checked = :checked WHERE id = :id")
+    void updateChecked(int id, boolean checked);
+
+
     @Query("DELETE FROM habits")
     void deleteAllHabits();
 

@@ -36,4 +36,8 @@ public class HabitViewModel extends AndroidViewModel {
     public LiveData<List<HabitEntity>> getAllHabits() {
         return allHabits;
     }
+
+    public void updateHabitChecked(int id, boolean checked) {
+        repository.updateChecked(id, checked);
+    }
 }

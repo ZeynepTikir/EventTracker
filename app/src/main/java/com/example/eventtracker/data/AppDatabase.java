@@ -12,7 +12,7 @@ import com.example.eventtracker.data.dao.HabitDao;
 import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.data.model.HabitEntity;
 
-@Database(entities = {TaskEntity.class, HabitEntity.class}, version = 2, exportSchema = false)
+@Database(entities = {TaskEntity.class, HabitEntity.class}, version = 3, exportSchema = false)
 @TypeConverters({Converters.class}) // 🔴 BURASI MUTLAKA EKLENECEK
 public abstract class AppDatabase extends RoomDatabase {
 

@@ -23,6 +23,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         this.eventList = eventList;
     }
 
+    public interface OnCheckedChangeListener {
+        void onCheckedChanged(EventItem item, boolean isChecked);
+    }
+
+    private OnCheckedChangeListener checkedChangeListener;
+
+    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
+        this.checkedChangeListener = listener;
+    }
+
+
     @NonNull
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -33,8 +44,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         EventItem item = eventList.get(position);
-
-        holder.checker.setOnCheckedChangeListener(null); // eski listener sıfırlanır
 
         if (item.getType() == EventItem.TYPE_TASK) {
             holder.icon.setImageResource(R.drawable.ic_task);
@@ -48,13 +57,20 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             holder.type.setText("Habit");
         }
 
-        holder.checker.setChecked(item.isChecked());
+        holder.checked.setOnCheckedChangeListener(null);
+        holder.checked.setChecked(item.isChecked());
 
-        holder.checker.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        holder.checked.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Log.d("Adapter Checkbox", String.valueOf(isChecked));
             item.setChecked(isChecked);
+
+            if (checkedChangeListener != null) {
+                checkedChangeListener.onCheckedChanged(item, isChecked);
+            }
         });
 
-        Log.d("BIND_VIEW", "Position " + position + ", Time: " + (item.getType() == EventItem.TYPE_TASK ? item.getTask().getTime() : item.getHabit().getTime()));
+
+        //Log.d("BIND_VIEW", "Position " + position + ", Time: " + (item.getType() == EventItem.TYPE_TASK ? item.getTask().getTime() : item.getHabit().getTime()));
     }
 
     @Override
@@ -65,7 +81,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public static class EventViewHolder extends RecyclerView.ViewHolder {
         ImageView icon;
         TextView name, time, type;
-        CheckBox checker;
+        CheckBox checked;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,7 +89,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             name = itemView.findViewById(R.id.eventName);
             time = itemView.findViewById(R.id.eventTime);
             type = itemView.findViewById(R.id.eventType); // EKLENDİ: Tip bilgisi
-            checker = itemView.findViewById(R.id.eventChecker);
+            checked = itemView.findViewById(R.id.eventChecker);
         }
     }
 }

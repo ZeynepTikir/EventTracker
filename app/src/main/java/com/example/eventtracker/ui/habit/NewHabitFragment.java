@@ -133,7 +133,7 @@ public class NewHabitFragment extends Fragment {
         habit.setName(name);
         habit.setTime(selectedTime);
         habit.setIcon("ic_habit");
-        habit.setChecker(false);
+        habit.setChecked(false);
         habit.setDays(selectedDays);
 
         habitViewModel.insert(habit);

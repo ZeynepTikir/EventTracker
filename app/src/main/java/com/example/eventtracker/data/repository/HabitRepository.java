@@ -30,6 +30,10 @@ public class HabitRepository {
         executorService.execute(() -> habitDao.update(habit));
     }
 
+    public void updateChecked(int id, boolean checked) {
+        executorService.execute(() -> habitDao.updateChecked(id, checked));
+    }
+
     public void delete(HabitEntity habit) {
         executorService.execute(() -> habitDao.delete(habit));
     }
