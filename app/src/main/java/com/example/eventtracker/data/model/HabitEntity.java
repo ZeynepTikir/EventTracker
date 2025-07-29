@@ -7,6 +7,10 @@ import androidx.room.TypeConverters;
 
 import com.example.eventtracker.data.Converters;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 @Entity(tableName = "habits")
 @TypeConverters(Converters.class)
 public class HabitEntity {
@@ -17,11 +21,8 @@ public class HabitEntity {
     private String name;
     private String icon;
     private String time;   // Format: "HH:mm"
-    @ColumnInfo(name = "checked")
-    private boolean checked;
 
     private boolean[] days; // Pzt:0, Salı:1, ..., Pazar:6
-
 
     // Getter & Setter
     public int getId() {
@@ -56,14 +57,6 @@ public class HabitEntity {
         this.time = time;
     }
 
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
-
     public boolean[] getDays() {
         return days;
     }
@@ -79,6 +72,24 @@ public class HabitEntity {
         int todayIndex = (dayOfWeek + 5) % 7; // Pazartesi=0, Salı=1, ..., Pazar=6
 
         return days != null && days.length == 7 && days[todayIndex];
+    }
+
+    public boolean isScheduledForDate(String dateStr) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date date = format.parse(dateStr);
+
+            java.util.Calendar calendar = java.util.Calendar.getInstance();
+            calendar.setTime(date);
+
+            int dayOfWeek = calendar.get(java.util.Calendar.DAY_OF_WEEK); // Pazar=1
+            int index = (dayOfWeek + 5) % 7; // Pazartesi=0
+
+            return days != null && days.length == 7 && days[index];
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

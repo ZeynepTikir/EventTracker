@@ -9,38 +9,47 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventtracker.R;
+import com.example.eventtracker.data.model.HabitCheckEntity;
+import com.example.eventtracker.data.model.HabitEntity;
+import com.example.eventtracker.viewmodel.HabitCheckViewModel;
+import com.example.eventtracker.ui.adapter.EventItem;
 
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder> {
 
     private List<EventItem> eventList;
+    private final HabitCheckViewModel habitCheckViewModel;
+    private final LifecycleOwner lifecycleOwner;
 
-    public EventAdapter(List<EventItem> eventList) {
+    private String selectedDate;
+
+    public EventAdapter(List<EventItem> eventList,
+                        HabitCheckViewModel habitCheckViewModel,
+                        LifecycleOwner lifecycleOwner,
+                        String selectedDate) {
         this.eventList = eventList;
+        this.habitCheckViewModel = habitCheckViewModel; // null olabilir mi?
+        this.lifecycleOwner = lifecycleOwner;
+        this.selectedDate = selectedDate;
+
+        //Log.e("EventAdapter", "Constructor habitCheckViewModel: " + (habitCheckViewModel == null ? "NULL" : "OK"));
     }
 
-    //event check için
-    public interface OnCheckedChangeListener {
-        void onCheckedChanged(EventItem item, boolean isChecked);
-    }
-    private OnCheckedChangeListener checkedChangeListener;
-    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
-        this.checkedChangeListener = listener;
-    }
 
-    // event edit için
     public interface OnItemClickListener {
         void onItemClick(EventItem item);
     }
+
     private OnItemClickListener listener;
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
-
 
     @NonNull
     @Override
@@ -51,47 +60,84 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     @Override
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
+
+
         EventItem item = eventList.get(position);
+
+        // Önce eski listener'ı temizle
+        holder.checked.setOnCheckedChangeListener(null);
 
         if (item.getType() == EventItem.TYPE_TASK) {
             holder.icon.setImageResource(R.drawable.ic_task);
             holder.name.setText(item.getTask().getName());
             holder.time.setText(item.getTask().getTime());
             holder.type.setText("Task");
-        } else {
+
+            holder.checked.setChecked(item.isChecked());
+            holder.checked.setEnabled(true);
+
+            holder.checked.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                item.setChecked(isChecked);
+                // Task kalıcı güncelleme gerekiyorsa burada yapabilirsin
+            });
+
+        } else if (habitCheckViewModel != null) {
+            HabitEntity habit = item.getHabit();
             holder.icon.setImageResource(R.drawable.ic_habit);
-            holder.name.setText(item.getHabit().getName());
-            holder.time.setText(item.getHabit().getTime());
+            holder.name.setText(habit.getName());
+            holder.time.setText(habit.getTime());
             holder.type.setText("Habit");
+
+            int habitId = habit.getId();
+            String date = selectedDate; // seçilen tarih kullanılmalı
+
+            if (habit.isScheduledForDate(date)) {
+                habitCheckViewModel.getHabitCheck(habitId, date).observe(lifecycleOwner, habitCheck -> {
+                    holder.checked.setOnCheckedChangeListener(null);
+
+                    boolean isChecked = habitCheck != null && habitCheck.isChecked();
+                    holder.checked.setChecked(isChecked);
+                    holder.checked.setEnabled(true);
+
+                    holder.checked.setOnCheckedChangeListener((buttonView, newChecked) -> {
+                        if (habitCheck != null) {
+                            habitCheck.setChecked(newChecked);
+                            habitCheckViewModel.update(habitCheck);
+                        } else {
+                            HabitCheckEntity newCheck = new HabitCheckEntity(habitId, date, newChecked);
+                            habitCheckViewModel.insert(newCheck);
+                        }
+                    });
+                });
+            } else {
+                holder.checked.setOnCheckedChangeListener(null);
+                holder.checked.setChecked(false);
+                holder.checked.setEnabled(false);
+            }
+        }
+        else {
+            Log.e("EventAdapter", "habitCheckViewModel is null!");
+            holder.checked.setChecked(false);
+            holder.checked.setEnabled(false);
         }
 
-        //edit için set yapısı
         holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onItemClick(item);
-            }
+            if (listener != null) listener.onItemClick(item);
         });
-
-        //checkbox için set yapısı
-        holder.checked.setOnCheckedChangeListener(null);
-        holder.checked.setChecked(item.isChecked());
-
-        holder.checked.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Log.d("Adapter Checkbox", String.valueOf(isChecked));
-            item.setChecked(isChecked);
-
-            if (checkedChangeListener != null) {
-                checkedChangeListener.onCheckedChanged(item, isChecked);
-            }
-        });
-
-
-        //Log.d("BIND_VIEW", "Position " + position + ", Time: " + (item.getType() == EventItem.TYPE_TASK ? item.getTask().getTime() : item.getHabit().getTime()));
     }
 
     @Override
     public int getItemCount() {
-        return eventList.size();
+        return eventList != null ? eventList.size() : 0;
+    }
+
+    public void setEventList(List<EventItem> newList) {
+        this.eventList = newList;
+        notifyDataSetChanged();
+    }
+
+    public void setSelectedDate(String selectedDate) {
+        this.selectedDate = selectedDate;
     }
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
@@ -104,7 +150,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             icon = itemView.findViewById(R.id.eventIcon);
             name = itemView.findViewById(R.id.eventName);
             time = itemView.findViewById(R.id.eventTime);
-            type = itemView.findViewById(R.id.eventType); // EKLENDİ: Tip bilgisi
+            type = itemView.findViewById(R.id.eventType);
             checked = itemView.findViewById(R.id.eventChecker);
         }
     }

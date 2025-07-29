@@ -42,8 +42,6 @@ public class NewHabitFragment extends Fragment {
         saveButton = view.findViewById(R.id.addButton);
         cancelText = view.findViewById(R.id.cancelText);
 
-
-
         dayCheckboxes[0] = view.findViewById(R.id.checkboxMonday);
         dayCheckboxes[1] = view.findViewById(R.id.checkboxTuesday);
         dayCheckboxes[2] = view.findViewById(R.id.checkboxWednesday);
@@ -53,26 +51,18 @@ public class NewHabitFragment extends Fragment {
         dayCheckboxes[6] = view.findViewById(R.id.checkboxSunday);
 
         for (CheckBox checkBox : dayCheckboxes) {
-            checkBox.setButtonDrawable(null); // Tik kutusunu kaldırır
-            //checkBox.setVisibility(View.VISIBLE); // TextView gibi görünmesini sağlar
+            checkBox.setButtonDrawable(null); // Tik işaretini kaldır
             checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 Context context = view.getContext();
                 if (isChecked) {
-                    checkBox.setBackgroundColor(ContextCompat.getColor(context, R.color.button));
+                    checkBox.setBackgroundResource(R.drawable.day_checkbox_background);
                     checkBox.setTextColor(ContextCompat.getColor(context, R.color.white));
-                    checkBox.setBackgroundResource(R.drawable.day_checkbox_background);
                 } else {
-                    checkBox.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-                    checkBox.setTextColor(ContextCompat.getColor(context, R.color.textcolor));
                     checkBox.setBackgroundResource(R.drawable.day_checkbox_background);
+                    checkBox.setTextColor(ContextCompat.getColor(context, R.color.textcolor));
                 }
-
             });
-
         }
-
-
-
 
         habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
 
@@ -133,15 +123,13 @@ public class NewHabitFragment extends Fragment {
         habit.setName(name);
         habit.setTime(selectedTime);
         habit.setIcon("ic_habit");
-        habit.setChecked(false);
         habit.setDays(selectedDays);
 
         habitViewModel.insert(habit);
         Toast.makeText(getContext(), "Alışkanlık kaydedildi", Toast.LENGTH_SHORT).show();
-        //clearFields();
+
         requireActivity().getSupportFragmentManager().popBackStack();
     }
-
 
 
     private void clearFields() {
@@ -150,5 +138,4 @@ public class NewHabitFragment extends Fragment {
         selectedTime = "";
         for (CheckBox cb : dayCheckboxes) cb.setChecked(false);
     }
-
 }

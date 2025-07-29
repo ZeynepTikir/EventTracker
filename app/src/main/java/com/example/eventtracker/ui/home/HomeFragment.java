@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventtracker.R;
+import com.example.eventtracker.data.model.HabitCheckEntity;
 import com.example.eventtracker.data.model.HabitEntity;
 import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.ui.AddSelectionBottomSheet;
@@ -22,6 +23,7 @@ import com.example.eventtracker.ui.habit.EditHabitBottomSheetFragment;
 import com.example.eventtracker.ui.habit.NewHabitFragment;
 import com.example.eventtracker.ui.task.EditTaskBottomSheetFragment;
 import com.example.eventtracker.ui.task.NewTaskFragment;
+import com.example.eventtracker.viewmodel.HabitCheckViewModel;
 import com.example.eventtracker.viewmodel.HabitViewModel;
 import com.example.eventtracker.viewmodel.TaskViewModel;
 
@@ -40,13 +42,14 @@ public class HomeFragment extends Fragment {
 
     private TaskViewModel taskViewModel;
     private HabitViewModel habitViewModel;
+    private HabitCheckViewModel habitCheckViewModel;
+
+    private String selectedDate = getTodayDate(); // başlangıçta bugünün tarihi
+
 
     private List<TaskEntity> currentTasks = new ArrayList<>();
     private List<HabitEntity> currentHabits = new ArrayList<>();
-
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    private List<HabitCheckEntity> currentHabitChecks = new ArrayList<>();
 
     @Nullable
     @Override
@@ -57,59 +60,16 @@ public class HomeFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerEvents);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        eventAdapter = new EventAdapter(eventList);
+        habitCheckViewModel = new ViewModelProvider(requireActivity()).get(HabitCheckViewModel.class);
+
+        eventAdapter = new EventAdapter(eventList, habitCheckViewModel, getViewLifecycleOwner(), selectedDate);
+
         recyclerView.setAdapter(eventAdapter);
-
-        View icAdd = view.findViewById(R.id.ic_add);
-        icAdd.setOnClickListener(v -> {
-            AddSelectionBottomSheet bottomSheet = new AddSelectionBottomSheet();
-
-            bottomSheet.setOnSelectionListener(new AddSelectionBottomSheet.OnSelectionListener() {
-                @Override
-                public void onAddTaskSelected() {
-                    NewTaskFragment newTaskFragment = new NewTaskFragment();
-                    requireActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, newTaskFragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-
-                @Override
-                public void onAddHabitSelected() {
-                    NewHabitFragment newHabitFragment = new NewHabitFragment();
-                    requireActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, newHabitFragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-            });
-
-            bottomSheet.show(getParentFragmentManager(), "AddSelectionBottomSheet");
-        });
 
         setupViewModels();
 
-        // edit eventx
-        eventAdapter.setOnItemClickListener(item -> {
-            if (item.getType() == EventItem.TYPE_TASK) {
-                EditTaskBottomSheetFragment editTaskFragment = new EditTaskBottomSheetFragment(item.getTask());
-                editTaskFragment.show(getParentFragmentManager(), "EditTaskBottomSheet");
-            } else if (item.getType() == EventItem.TYPE_HABIT) {
-                EditHabitBottomSheetFragment editHabitFragment = new EditHabitBottomSheetFragment(item.getHabit());
-                editHabitFragment.show(getParentFragmentManager(), "EditHabitBottomSheet");
-            }
-        });
-
-        // checkbox
-        eventAdapter.setOnCheckedChangeListener((item, isChecked) -> {
-            if (item.getType() == EventItem.TYPE_TASK) {
-                taskViewModel.updateTaskChecked(item.getTask().getId(), isChecked);
-            } else {
-                habitViewModel.updateHabitChecked(item.getHabit().getId(), isChecked);
-            }
-        });
-
-
+        setupAddButton(view);
+        setupEventListeners();
 
         return view;
     }
@@ -117,73 +77,91 @@ public class HomeFragment extends Fragment {
     private void setupViewModels() {
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
+        habitCheckViewModel = new ViewModelProvider(this).get(HabitCheckViewModel.class);
 
-        taskViewModel.getAllTasks().observe(getViewLifecycleOwner(), tasks -> {
-            currentTasks = tasks;
+        // selectedDate kullan
+        taskViewModel.getTasksByDate(selectedDate).observe(getViewLifecycleOwner(), tasks -> {
+            currentTasks = tasks != null ? tasks : new ArrayList<>();
             updateEventList();
         });
 
         habitViewModel.getAllHabits().observe(getViewLifecycleOwner(), habits -> {
-            currentHabits = habits;
-            updateEventList();for (HabitEntity habit : habits) {
-                //Log.d("HabitDebug", "Habit adı: " + habit.getName());
-                boolean[] days = habit.getDays();
+            currentHabits = habits != null ? habits : new ArrayList<>();
 
-                if (days != null && days.length == 7) {
-                    StringBuilder sb = new StringBuilder();
-                    //String[] dayNames = {"Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"};
+            habitCheckViewModel.getHabitChecksByDate(selectedDate).observe(getViewLifecycleOwner(), checks -> {
+                currentHabitChecks = checks != null ? checks : new ArrayList<>();
+                updateEventList();
+            });
+        });
+    }
 
-                    for (int i = 0; i < 7; i++) {
-                        //sb.append(dayNames[i]).append(": ").append(days[i] ? "✔️" : "❌").append("  ");
-                    }
-
-                    //Log.d("HabitDebug", "Aktif günler -> " + sb.toString());
-                } else {
-                    //Log.d("HabitDebug", "Gün bilgisi eksik!");
+    private void setupAddButton(View view) {
+        View icAdd = view.findViewById(R.id.ic_add);
+        icAdd.setOnClickListener(v -> {
+            AddSelectionBottomSheet bottomSheet = new AddSelectionBottomSheet();
+            bottomSheet.setOnSelectionListener(new AddSelectionBottomSheet.OnSelectionListener() {
+                @Override
+                public void onAddTaskSelected() {
+                    getParentFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new NewTaskFragment())
+                            .addToBackStack(null)
+                            .commit();
                 }
+
+                @Override
+                public void onAddHabitSelected() {
+                    getParentFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, new NewHabitFragment())
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+            bottomSheet.show(getParentFragmentManager(), "AddSelectionBottomSheet");
+        });
+    }
+
+    private void setupEventListeners() {
+        eventAdapter.setOnItemClickListener(item -> {
+            if (item.getType() == EventItem.TYPE_TASK) {
+                new EditTaskBottomSheetFragment(item.getTask())
+                        .show(getParentFragmentManager(), "EditTaskBottomSheet");
+            } else if (item.getType() == EventItem.TYPE_HABIT) {
+                new EditHabitBottomSheetFragment(item.getHabit())
+                        .show(getParentFragmentManager(), "EditHabitBottomSheet");
             }
         });
+
     }
 
     private void updateEventList() {
         eventList.clear();
-        String today = getTodayDate(); // "yyyy-MM-dd"
 
-        // Bugünün task'leri
-        //android.util.Log.d("HomeFragment", "----- Tasks for today (" + today + ") -----");
         for (TaskEntity task : currentTasks) {
-            if (task.getDate() != null && task.getDate().equals(today)) {
-                eventList.add(new EventItem(task));
-                //android.util.Log.d("HomeFragment", "Task: " + task.getName() + " at " + task.getTime());
-            }
+            eventList.add(new EventItem(task, task.isChecked()));
         }
 
-        // Bugünkü habit'ler
-        //android.util.Log.d("HomeFragment", "----- Habits -----");
         for (HabitEntity habit : currentHabits) {
-            boolean show = habit.isScheduledForToday();
-            //android.util.Log.d("HomeFragment", "Habit: " + habit.getName() + ", showToday: " + show);
-            if (show) {
-                eventList.add(new EventItem(habit));
+            if (habit.isScheduledForDate(selectedDate)) {
+                boolean checked = false;
+                for (HabitCheckEntity check : currentHabitChecks) {
+                    if (check.getHabitId() == habit.getId()) {
+                        checked = check.isChecked();
+                        break;
+                    }
+                }
+                eventList.add(new EventItem(habit, checked));
             }
         }
 
-        // Saat sırasına göre sırala
+        // Sırala ve bildir
         Collections.sort(eventList, (e1, e2) -> {
-            String time1 = e1.getType() == EventItem.TYPE_TASK
-                    ? e1.getTask().getTime()
-                    : e1.getHabit().getTime();
-
-            String time2 = e2.getType() == EventItem.TYPE_TASK
-                    ? e2.getTask().getTime()
-                    : e2.getHabit().getTime();
-
+            String time1 = e1.getType() == EventItem.TYPE_TASK ? e1.getTask().getTime() : e1.getHabit().getTime();
+            String time2 = e2.getType() == EventItem.TYPE_TASK ? e2.getTask().getTime() : e2.getHabit().getTime();
             return compareTimeStrings(time1, time2);
         });
 
-        //android.util.Log.d("HomeFragment", "Total events to show: " + eventList.size());
-
-        eventAdapter.notifyDataSetChanged();
+        eventAdapter.setEventList(eventList);
+        eventAdapter.setSelectedDate(selectedDate);
     }
 
     private String getTodayDate() {
@@ -197,9 +175,7 @@ public class HomeFragment extends Fragment {
             Date d2 = sdf.parse(t2);
             return d1.compareTo(d2);
         } catch (Exception e) {
-            return t1.compareTo(t2); // Parse edemezsek string karşılaştırması
+            return t1.compareTo(t2);
         }
     }
-
-
 }

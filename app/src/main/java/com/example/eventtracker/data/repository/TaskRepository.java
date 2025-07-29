@@ -46,4 +46,9 @@ public class TaskRepository {
     public LiveData<List<TaskEntity>> getTodayTasks(String todayDate) {
         return taskDao.getTasksByDate(todayDate);
     }
+
+    public LiveData<List<TaskEntity>> getTasksByDate(String date) {
+        return taskDao.getTasksByDate(date);
+    }
+
 }

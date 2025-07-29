@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.eventtracker.data.model.HabitEntity;
+import com.example.eventtracker.data.model.HabitWithCheck;
 import com.example.eventtracker.data.repository.HabitRepository;
 
 import java.util.List;
@@ -33,11 +34,14 @@ public class HabitViewModel extends AndroidViewModel {
         repository.delete(habit);
     }
 
-    public LiveData<List<HabitEntity>> getAllHabits() {
-        return allHabits;
+
+
+    public LiveData<List<HabitWithCheck>> getHabitsWithChecksForDate(String date) {
+        return repository.getHabitsWithChecksForDate(date);
     }
 
-    public void updateHabitChecked(int id, boolean checked) {
-        repository.updateChecked(id, checked);
+
+    public LiveData<List<HabitEntity>> getAllHabits() {
+        return allHabits;
     }
 }

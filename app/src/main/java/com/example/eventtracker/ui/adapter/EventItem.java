@@ -4,26 +4,40 @@ import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.data.model.HabitEntity;
 
 public class EventItem {
+
     public static final int TYPE_TASK = 0;
     public static final int TYPE_HABIT = 1;
 
-    private final int type;
-    private final TaskEntity task;
-    private final HabitEntity habit;
+    private TaskEntity task;
+    private HabitEntity habit;
     private boolean checked;
+    private int type;
 
-    public EventItem(TaskEntity task) {
+    // Task constructor
+    // Task için constructor
+    public EventItem(TaskEntity task, boolean checked) {
         this.task = task;
-        this.habit = null;
+        this.checked = checked;
         this.type = TYPE_TASK;
     }
 
-    public EventItem(HabitEntity habit) {
+    // Habit için constructor
+    public EventItem(HabitEntity habit, boolean checked) {
         this.habit = habit;
-        this.task = null;
+        this.checked = checked;
         this.type = TYPE_HABIT;
     }
 
+    // Task için checked default olarak false atanır
+    public EventItem(TaskEntity task) {
+        this.task = task;
+        this.checked = false;
+        this.type = TYPE_TASK;
+    }
+
+
+
+    // Getter'lar
     public int getType() {
         return type;
     }
@@ -36,24 +50,12 @@ public class EventItem {
         return habit;
     }
 
-    public String getName() {
-        if (type == TYPE_TASK) {
-            assert task != null;
-            return task.getName();
-        } else {
-            assert habit != null;
-            return habit.getName();
-        }
-    }
-
-
     public boolean isChecked() {
-        return type == TYPE_TASK ? task.isChecked() : habit.isChecked();
+        return checked;
     }
 
     public void setChecked(boolean checked) {
-        if (type == TYPE_TASK) task.setChecked(checked);
-        else habit.setChecked(checked);
+        this.checked = checked;
     }
 
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.example.eventtracker.data.AppDatabase;
 import com.example.eventtracker.data.dao.HabitDao;
 import com.example.eventtracker.data.model.HabitEntity;
+import com.example.eventtracker.data.model.HabitWithCheck;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -30,9 +31,10 @@ public class HabitRepository {
         executorService.execute(() -> habitDao.update(habit));
     }
 
-    public void updateChecked(int id, boolean checked) {
-        executorService.execute(() -> habitDao.updateChecked(id, checked));
+    public LiveData<List<HabitWithCheck>> getHabitsWithChecksForDate(String date) {
+        return habitDao.getHabitsWithChecksForDate(date);
     }
+
 
     public void delete(HabitEntity habit) {
         executorService.execute(() -> habitDao.delete(habit));
@@ -41,4 +43,5 @@ public class HabitRepository {
     public LiveData<List<HabitEntity>> getAllHabits() {
         return habitDao.getAllHabits();
     }
+
 }

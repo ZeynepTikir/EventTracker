@@ -1,0 +1,16 @@
+warning: in the working copy of 'app/src/main/res/layout/fragment_new_task.xml', LF will be replaced by CRLF the next time Git touches it
+app/src/main/java/com/example/eventtracker/ui/adapter/EventAdapter.java
+app/src/main/java/com/example/eventtracker/ui/habit/EditHabitActivity.java
+app/src/main/java/com/example/eventtracker/ui/habit/EditHabitBottomSheetFragment.java
+app/src/main/java/com/example/eventtracker/ui/habit/NewHabitFragment.java
+app/src/main/java/com/example/eventtracker/ui/home/HomeFragment.java
+app/src/main/java/com/example/eventtracker/ui/task/EditTaskActivity.java
+app/src/main/java/com/example/eventtracker/ui/task/EditTaskBottomSheetFragment.java
+app/src/main/res/drawable/drag_handle_background.xml
+app/src/main/res/drawable/rounded_top_corners.xml
+app/src/main/res/layout/bottom_sheet_add_selection.xml
+app/src/main/res/layout/bottom_sheet_edit_habit.xml
+app/src/main/res/layout/bottom_sheet_edit_task.xml
+app/src/main/res/layout/fragment_new_task.xml
+app/src/main/res/layout/item_event.xml
+app/src/main/res/values/Styles.xml

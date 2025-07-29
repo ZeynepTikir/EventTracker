@@ -44,4 +44,9 @@ public class TaskViewModel extends AndroidViewModel {
     public void updateTaskChecked(int id, boolean checked) {
         repository.updateChecked(id, checked);
     }
+
+    public LiveData<List<TaskEntity>> getTasksByDate(String date) {
+        return repository.getTasksByDate(date);
+    }
+
 }
