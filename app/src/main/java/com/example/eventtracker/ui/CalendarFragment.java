@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eventtracker.R;
 import com.example.eventtracker.data.model.HabitCheckEntity;
 import com.example.eventtracker.data.model.HabitEntity;
-import com.example.eventtracker.data.model.HabitWithCheck;
 import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.ui.adapter.EventAdapter;
 import com.example.eventtracker.ui.adapter.EventItem;
@@ -25,7 +24,6 @@ import com.example.eventtracker.viewmodel.HabitCheckViewModel;
 import com.example.eventtracker.viewmodel.HabitViewModel;
 import com.example.eventtracker.viewmodel.TaskViewModel;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,9 +55,6 @@ public class CalendarFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-
-
-
         calendarView = view.findViewById(R.id.calendarView);
         textSelectedDate = view.findViewById(R.id.textSelectedDate);
         recyclerViewEvents = view.findViewById(R.id.recyclerViewEvents);
@@ -73,8 +68,8 @@ public class CalendarFragment extends Fragment {
         selectedDate = dbFormat.format(new Date(calendarView.getDate()));
         textSelectedDate.setText("Seçilen Gün: " + displayFormat.format(new Date(calendarView.getDate())));
 
-        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        eventAdapter = new EventAdapter(new ArrayList<>(), habitCheckViewModel, getViewLifecycleOwner(), today);
+        // Adapter oluştururken artık taskViewModel de parametre olarak ekleniyor
+        eventAdapter = new EventAdapter(new ArrayList<>(), taskViewModel, habitCheckViewModel, getViewLifecycleOwner(), selectedDate);
         recyclerViewEvents.setAdapter(eventAdapter);
 
         observeEventsByDate(selectedDate);
@@ -86,8 +81,6 @@ public class CalendarFragment extends Fragment {
             textSelectedDate.setText("Seçilen Gün: " + dayOfMonth + "/" + (month + 1) + "/" + year);
 
             eventAdapter.setSelectedDate(selectedDate);
-            eventAdapter.notifyDataSetChanged();
-
             observeEventsByDate(selectedDate);
         });
 
@@ -99,22 +92,20 @@ public class CalendarFragment extends Fragment {
             habitViewModel.getHabitsWithChecksForDate(date).observe(getViewLifecycleOwner(), habitsWithChecks -> {
                 List<EventItem> items = new ArrayList<>();
 
-                // Haftanın günü
                 try {
-                    java.util.Calendar calendar = java.util.Calendar.getInstance();
-                    java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    calendar.setTime(format.parse(date));
-                    int dayOfWeek = calendar.get(java.util.Calendar.DAY_OF_WEEK);
-                    int dayIndex = (dayOfWeek + 5) % 7;
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dbFormat.parse(date));
+                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+                    int dayIndex = (dayOfWeek + 5) % 7; // Pazartesi=0 ... Pazar=6
 
                     // Görevler
                     if (tasks != null) {
                         for (TaskEntity task : tasks) {
-                            items.add(new EventItem(task));
+                            items.add(new EventItem(task, task.isChecked()));
                         }
                     }
 
-                    // Alışkanlıklar sadece ilgili güne göre
+                    // Alışkanlıklar
                     if (habitsWithChecks != null) {
                         for (var hwc : habitsWithChecks) {
                             HabitEntity habit = hwc.getHabit();

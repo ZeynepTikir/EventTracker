@@ -46,7 +46,6 @@ public class HomeFragment extends Fragment {
 
     private String selectedDate = getTodayDate(); // başlangıçta bugünün tarihi
 
-
     private List<TaskEntity> currentTasks = new ArrayList<>();
     private List<HabitEntity> currentHabits = new ArrayList<>();
     private List<HabitCheckEntity> currentHabitChecks = new ArrayList<>();
@@ -60,13 +59,12 @@ public class HomeFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerEvents);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        habitCheckViewModel = new ViewModelProvider(requireActivity()).get(HabitCheckViewModel.class);
-
-        eventAdapter = new EventAdapter(eventList, habitCheckViewModel, getViewLifecycleOwner(), selectedDate);
-
-        recyclerView.setAdapter(eventAdapter);
 
         setupViewModels();
+
+        // Adapter oluştururken artık taskViewModel parametre olarak ekleniyor
+        eventAdapter = new EventAdapter(eventList, taskViewModel, habitCheckViewModel, getViewLifecycleOwner(), selectedDate);
+        recyclerView.setAdapter(eventAdapter);
 
         setupAddButton(view);
         setupEventListeners();
@@ -79,7 +77,6 @@ public class HomeFragment extends Fragment {
         habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
         habitCheckViewModel = new ViewModelProvider(this).get(HabitCheckViewModel.class);
 
-        // selectedDate kullan
         taskViewModel.getTasksByDate(selectedDate).observe(getViewLifecycleOwner(), tasks -> {
             currentTasks = tasks != null ? tasks : new ArrayList<>();
             updateEventList();
@@ -130,7 +127,6 @@ public class HomeFragment extends Fragment {
                         .show(getParentFragmentManager(), "EditHabitBottomSheet");
             }
         });
-
     }
 
     private void updateEventList() {
@@ -171,9 +167,7 @@ public class HomeFragment extends Fragment {
     private int compareTimeStrings(String t1, String t2) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            Date d1 = sdf.parse(t1);
-            Date d2 = sdf.parse(t2);
-            return d1.compareTo(d2);
+            return sdf.parse(t1).compareTo(sdf.parse(t2));
         } catch (Exception e) {
             return t1.compareTo(t2);
         }

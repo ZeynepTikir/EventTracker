@@ -20,7 +20,7 @@
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="90dp" />
+        android:layout_marginBottom="70dp" />
 
     <!-- Alt Navigasyon Menüsü -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
