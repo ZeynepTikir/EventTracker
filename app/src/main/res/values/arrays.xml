@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="task_icons">
+        <item>@drawable/ic_task</item>
+        <item>@drawable/ic_event</item>
+        <item>@drawable/ic_0</item>
+        <item>@drawable/ic_1</item>
+        <item>@drawable/ic_2</item>
+        <item>@drawable/ic_3</item>
+        <item>@drawable/ic_4</item>
+        <item>@drawable/ic_5</item>
+        <item>@drawable/ic_6</item>
+        <item>@drawable/ic_7</item>
+        <item>@drawable/ic_8</item>
+        <item>@drawable/ic_9</item>
+    </array>
+</resources>

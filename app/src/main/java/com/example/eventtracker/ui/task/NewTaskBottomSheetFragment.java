@@ -4,17 +4,18 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eventtracker.R;
@@ -26,12 +27,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment {
+public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
+        implements IconPickerDialog.OnIconSelectedListener {
+
     private EditText taskNameEditText, taskDateEditText, taskTimeEditText;
+    private ImageView imageViewIcon;
     private TaskViewModel taskViewModel;
     private final Calendar calendar = Calendar.getInstance();
-
-    public NewTaskBottomSheetFragment() {}
+    private int selectedIconResId = R.drawable.ic_task; // varsayılan icon
 
     @Nullable
     @Override
@@ -44,17 +47,24 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment {
         taskNameEditText = view.findViewById(R.id.taskNameEditText);
         taskDateEditText = view.findViewById(R.id.taskDateEditText);
         taskTimeEditText = view.findViewById(R.id.taskTimeEditText);
+        imageViewIcon = view.findViewById(R.id.imageViewIcon);
         Button addButton = view.findViewById(R.id.addButton);
         TextView cancelText = view.findViewById(R.id.cancelText);
 
         taskViewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
 
-        //date and time
+        // Icon değişimi
+        imageViewIcon.setOnClickListener(v -> {
+            IconPickerDialog dialog = new IconPickerDialog();
+            dialog.setTargetFragment(this, 0);
+            dialog.show(getParentFragmentManager(), "icon_picker");
+        });
+
+        // Date ve Time picker
         taskDateEditText.setOnClickListener(v -> showDatePicker());
         taskTimeEditText.setOnClickListener(v -> showTimePicker());
 
-
-        //add
+        // Add
         addButton.setOnClickListener(v -> {
             String name = taskNameEditText.getText().toString().trim();
             String date = taskDateEditText.getText().toString().trim();
@@ -69,8 +79,8 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment {
             task.setName(name);
             task.setDate(date);
             task.setTime(time);
-            task.setIcon("ic_task"); // varsayılan bir icon adı
-            task.setChecked(false);  // başlangıçta işaretli değil
+            task.setIcon(getResources().getResourceEntryName(selectedIconResId));
+            task.setChecked(false);
 
             taskViewModel.insert(task);
 
@@ -78,8 +88,11 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment {
             dismiss();
         });
 
-        //cancel
+        // Cancel
         cancelText.setOnClickListener(v -> dismiss());
+
+        // Başlangıç iconu
+        imageViewIcon.setImageResource(selectedIconResId);
 
         return view;
     }
@@ -110,5 +123,12 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment {
                 calendar.get(Calendar.MINUTE),
                 true)
                 .show();
+    }
+
+    @Override
+    public void onIconSelected(int iconResId) {
+        Log.d("IconPickerDialog", "Selected icon: " + iconResId);
+        selectedIconResId = iconResId;
+        imageViewIcon.setImageResource(iconResId);
     }
 }

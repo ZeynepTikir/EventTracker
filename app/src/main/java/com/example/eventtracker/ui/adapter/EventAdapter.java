@@ -47,14 +47,26 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         TaskEntity task = taskList.get(position);
 
-        holder.checked.setOnCheckedChangeListener(null); // eski listener'ı temizle
+        // Eski listener'ı temizle
+        holder.checked.setOnCheckedChangeListener(null);
 
-        holder.icon.setImageResource(R.drawable.ic_task);
+        // Icon'u String'den resource ID'ye çevirip set et
+        String iconName = task.getIcon(); // örn: "ic_task"
+        int iconResId = holder.icon.getContext()
+                .getResources()
+                .getIdentifier(iconName, "drawable", holder.icon.getContext().getPackageName());
+        if (iconResId != 0) {
+            holder.icon.setImageResource(iconResId);
+        } else {
+            holder.icon.setImageResource(R.drawable.ic_task); // default icon
+        }
+
         holder.name.setText(task.getName());
         holder.time.setText(task.getTime());
         holder.checked.setChecked(task.isChecked());
         holder.checked.setEnabled(true);
 
+        // Checked değişimini DB'ye yansıt
         holder.checked.setOnCheckedChangeListener((buttonView, isChecked) -> {
             task.setChecked(isChecked);
             taskViewModel.update(task); // Room DB güncellemesi
@@ -64,6 +76,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             if (listener != null) listener.onItemClick(task);
         });
     }
+
 
     @Override
     public int getItemCount() {

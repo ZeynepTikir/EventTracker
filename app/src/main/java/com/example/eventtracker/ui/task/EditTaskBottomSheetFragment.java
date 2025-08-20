@@ -9,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.eventtracker.R;
@@ -26,16 +26,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment {
+public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment
+        implements IconPickerDialog.OnIconSelectedListener {
 
     private EditText taskNameEditText, taskDateEditText, taskTimeEditText;
-    private TextView deleteText;
+    private ImageView imageViewIcon;
+    private TextView deleteText, title;
     private Button updateButton;
     private final Calendar calendar = Calendar.getInstance();
 
     private TaskViewModel taskViewModel;
+    private TaskEntity task;
 
-    private TaskEntity task; // düzenlenen task
+    private int selectedIconResId = R.drawable.ic_task; // varsayılan icon
 
     public EditTaskBottomSheetFragment(TaskEntity task) {
         this.task = task;
@@ -45,60 +48,76 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.bottom_sheet_edit_task, container, false);
+        View view = inflater.inflate(R.layout.fragment_new_task, container, false);
 
+        title = view.findViewById(R.id.title);
         taskNameEditText = view.findViewById(R.id.taskNameEditText);
         taskDateEditText = view.findViewById(R.id.taskDateEditText);
         taskTimeEditText = view.findViewById(R.id.taskTimeEditText);
-        deleteText = view.findViewById(R.id.deleteText);
-        updateButton = view.findViewById(R.id.updateButton);
+        imageViewIcon = view.findViewById(R.id.imageViewIcon);
+        updateButton = view.findViewById(R.id.addButton);
+        deleteText = view.findViewById(R.id.cancelText); // dilersen farklı id ile deleteText yapabilirsin
 
         taskViewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
 
-        // Mevcut bilgileri doldur
+        title.setText("Edit Task");
+
+        // Mevcut task bilgilerini doldur
         if (task != null) {
             taskNameEditText.setText(task.getName());
             taskDateEditText.setText(task.getDate());
             taskTimeEditText.setText(task.getTime());
+
+            // Context-safe icon yükleme
+            selectedIconResId = getIconResIdFromName(task.getIcon());
+            imageViewIcon.setImageResource(selectedIconResId);
         }
 
-        // Tarih ve saat seçimleri için datepicker/timepicker ekleyebilirsin, basit örnek:
+        // Icon değişimi
+        imageViewIcon.setOnClickListener(v -> {
+            IconPickerDialog dialog = new IconPickerDialog();
+            dialog.setTargetFragment(this, 0);
+            dialog.show(getParentFragmentManager(), "icon_picker");
+        });
+
+        // Date & Time pickers
         taskDateEditText.setOnClickListener(v -> showDatePicker());
         taskTimeEditText.setOnClickListener(v -> showTimePicker());
 
+        // Update button
+        updateButton.setText("Update");
         updateButton.setOnClickListener(v -> {
             String name = taskNameEditText.getText().toString().trim();
             String date = taskDateEditText.getText().toString().trim();
             String time = taskTimeEditText.getText().toString().trim();
 
-            if (name.isEmpty()) {
-                taskNameEditText.setError("Task name required");
+            if (TextUtils.isEmpty(name) || TextUtils.isEmpty(date) || TextUtils.isEmpty(time)) {
+                Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // task nesnesini güncelle
             task.setName(name);
             task.setDate(date);
             task.setTime(time);
+            task.setIcon(getResources().getResourceEntryName(selectedIconResId));
 
             taskViewModel.update(task);
             dismiss();
         });
 
+        // Delete button
+        deleteText.setText("Delete");
         deleteText.setOnClickListener(v -> {
             new androidx.appcompat.app.AlertDialog.Builder(requireContext())
                     .setTitle("Delete Task")
                     .setMessage("Are you sure you want to delete this task?")
                     .setPositiveButton("Yes", (dialog, which) -> {
-                        if (task != null) {
-                            taskViewModel.delete(task);
-                            dismiss();
-                        }
+                        taskViewModel.delete(task);
+                        dismiss();
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
         });
-
 
         return view;
     }
@@ -129,5 +148,16 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment {
                 calendar.get(Calendar.MINUTE),
                 true)
                 .show();
+    }
+
+    private int getIconResIdFromName(String iconName) {
+        if (iconName == null || iconName.isEmpty()) return R.drawable.ic_task;
+        return getResources().getIdentifier(iconName, "drawable", requireContext().getPackageName());
+    }
+
+    @Override
+    public void onIconSelected(int iconResId) {
+        selectedIconResId = iconResId;
+        imageViewIcon.setImageResource(iconResId);
     }
 }
