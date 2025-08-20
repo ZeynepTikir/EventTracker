@@ -11,7 +11,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.eventtracker.ui.CalendarFragment;
-import com.example.eventtracker.ui.habit.NewHabitFragment;
 import com.example.eventtracker.ui.home.HomeFragment;
 import com.example.eventtracker.ui.task.NewTaskFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -36,8 +35,7 @@ public class MainActivity extends AppCompatActivity {
             BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
             View viewShadow = findViewById(R.id.viewShadow);
 
-            boolean shouldHideNav = currentFragment instanceof NewTaskFragment
-                    || currentFragment instanceof NewHabitFragment;
+            boolean shouldHideNav = currentFragment instanceof NewTaskFragment;
 
             if (shouldHideNav) {
                 bottomNav.setVisibility(View.GONE);

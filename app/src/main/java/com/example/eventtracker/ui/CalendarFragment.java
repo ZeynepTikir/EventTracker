@@ -15,23 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventtracker.R;
-import com.example.eventtracker.data.model.HabitCheckEntity;
-import com.example.eventtracker.data.model.HabitEntity;
 import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.ui.adapter.EventAdapter;
-import com.example.eventtracker.ui.adapter.EventItem;
-import com.example.eventtracker.viewmodel.HabitCheckViewModel;
-import com.example.eventtracker.viewmodel.HabitViewModel;
 import com.example.eventtracker.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-// Takvim sayfası
 public class CalendarFragment extends Fragment {
 
     private CalendarView calendarView;
@@ -39,8 +32,6 @@ public class CalendarFragment extends Fragment {
     private RecyclerView recyclerViewEvents;
     private EventAdapter eventAdapter;
     private TaskViewModel taskViewModel;
-    private HabitViewModel habitViewModel;
-    private HabitCheckViewModel habitCheckViewModel;
 
     private String selectedDate;
 
@@ -51,7 +42,8 @@ public class CalendarFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
@@ -61,68 +53,33 @@ public class CalendarFragment extends Fragment {
 
         recyclerViewEvents.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        habitCheckViewModel = new ViewModelProvider(requireActivity()).get(HabitCheckViewModel.class);
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
 
+        // İlk açılışta bugünün tarihi
         selectedDate = dbFormat.format(new Date(calendarView.getDate()));
         textSelectedDate.setText("Seçilen Gün: " + displayFormat.format(new Date(calendarView.getDate())));
 
-        // Adapter oluştururken artık taskViewModel de parametre olarak ekleniyor
-        eventAdapter = new EventAdapter(new ArrayList<>(), taskViewModel, habitCheckViewModel, getViewLifecycleOwner(), selectedDate);
+        // Adapter oluştur
+        eventAdapter = new EventAdapter(new ArrayList<>(), taskViewModel);
         recyclerViewEvents.setAdapter(eventAdapter);
 
-        observeEventsByDate(selectedDate);
+        observeTasksByDate(selectedDate);
 
+        // Tarih seçilince
         calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
-            String dateString = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, dayOfMonth);
-            selectedDate = dateString;
-
+            selectedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, dayOfMonth);
             textSelectedDate.setText("Seçilen Gün: " + dayOfMonth + "/" + (month + 1) + "/" + year);
 
-            eventAdapter.setSelectedDate(selectedDate);
-            observeEventsByDate(selectedDate);
+            observeTasksByDate(selectedDate);
         });
 
         return view;
     }
 
-    private void observeEventsByDate(String date) {
+    private void observeTasksByDate(String date) {
         taskViewModel.getTasksByDate(date).observe(getViewLifecycleOwner(), tasks -> {
-            habitViewModel.getHabitsWithChecksForDate(date).observe(getViewLifecycleOwner(), habitsWithChecks -> {
-                List<EventItem> items = new ArrayList<>();
-
-                try {
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(dbFormat.parse(date));
-                    int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-                    int dayIndex = (dayOfWeek + 5) % 7; // Pazartesi=0 ... Pazar=6
-
-                    // Görevler
-                    if (tasks != null) {
-                        for (TaskEntity task : tasks) {
-                            items.add(new EventItem(task, task.isChecked()));
-                        }
-                    }
-
-                    // Alışkanlıklar
-                    if (habitsWithChecks != null) {
-                        for (var hwc : habitsWithChecks) {
-                            HabitEntity habit = hwc.getHabit();
-                            HabitCheckEntity check = hwc.getCheck();
-                            boolean isChecked = check != null && check.isChecked();
-
-                            if (habit.getDays() != null && habit.getDays().length == 7 && habit.getDays()[dayIndex]) {
-                                items.add(new EventItem(habit, isChecked));
-                            }
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                eventAdapter.setEventList(items);
-            });
+            List<TaskEntity> taskList = tasks != null ? tasks : new ArrayList<>();
+            eventAdapter.setTaskList(taskList);
         });
     }
 }

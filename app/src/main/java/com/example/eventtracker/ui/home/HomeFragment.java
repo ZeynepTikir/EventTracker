@@ -1,6 +1,7 @@
 package com.example.eventtracker.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,18 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventtracker.R;
-import com.example.eventtracker.data.model.HabitCheckEntity;
-import com.example.eventtracker.data.model.HabitEntity;
 import com.example.eventtracker.data.model.TaskEntity;
-import com.example.eventtracker.ui.AddSelectionBottomSheet;
 import com.example.eventtracker.ui.adapter.EventAdapter;
-import com.example.eventtracker.ui.adapter.EventItem;
-import com.example.eventtracker.ui.habit.EditHabitBottomSheetFragment;
-import com.example.eventtracker.ui.habit.NewHabitFragment;
 import com.example.eventtracker.ui.task.EditTaskBottomSheetFragment;
 import com.example.eventtracker.ui.task.NewTaskFragment;
-import com.example.eventtracker.viewmodel.HabitCheckViewModel;
-import com.example.eventtracker.viewmodel.HabitViewModel;
 import com.example.eventtracker.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
@@ -38,17 +31,11 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private EventAdapter eventAdapter;
-    private List<EventItem> eventList = new ArrayList<>();
+    private final List<TaskEntity> taskList = new ArrayList<>();
 
     private TaskViewModel taskViewModel;
-    private HabitViewModel habitViewModel;
-    private HabitCheckViewModel habitCheckViewModel;
 
-    private String selectedDate = getTodayDate(); // başlangıçta bugünün tarihi
-
-    private List<TaskEntity> currentTasks = new ArrayList<>();
-    private List<HabitEntity> currentHabits = new ArrayList<>();
-    private List<HabitCheckEntity> currentHabitChecks = new ArrayList<>();
+    private final String selectedDate = getTodayDate();
 
     @Nullable
     @Override
@@ -62,8 +49,8 @@ public class HomeFragment extends Fragment {
 
         setupViewModels();
 
-        // Adapter oluştururken artık taskViewModel parametre olarak ekleniyor
-        eventAdapter = new EventAdapter(eventList, taskViewModel, habitCheckViewModel, getViewLifecycleOwner(), selectedDate);
+        // Adapter oluşturuluyor
+        eventAdapter = new EventAdapter(taskList, taskViewModel);
         recyclerView.setAdapter(eventAdapter);
 
         setupAddButton(view);
@@ -74,102 +61,56 @@ public class HomeFragment extends Fragment {
 
     private void setupViewModels() {
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        habitViewModel = new ViewModelProvider(this).get(HabitViewModel.class);
-        habitCheckViewModel = new ViewModelProvider(this).get(HabitCheckViewModel.class);
 
+        // Bugünün görevlerini canlı olarak gözlemle
         taskViewModel.getTasksByDate(selectedDate).observe(getViewLifecycleOwner(), tasks -> {
-            currentTasks = tasks != null ? tasks : new ArrayList<>();
-            updateEventList();
-        });
-
-        habitViewModel.getAllHabits().observe(getViewLifecycleOwner(), habits -> {
-            currentHabits = habits != null ? habits : new ArrayList<>();
-
-            habitCheckViewModel.getHabitChecksByDate(selectedDate).observe(getViewLifecycleOwner(), checks -> {
-                currentHabitChecks = checks != null ? checks : new ArrayList<>();
-                updateEventList();
-            });
+            updateTaskList(tasks != null ? tasks : new ArrayList<>());
         });
     }
 
     private void setupAddButton(View view) {
         View icAdd = view.findViewById(R.id.ic_add);
-        icAdd.setOnClickListener(v -> {
-            AddSelectionBottomSheet bottomSheet = new AddSelectionBottomSheet();
-            bottomSheet.setOnSelectionListener(new AddSelectionBottomSheet.OnSelectionListener() {
-                @Override
-                public void onAddTaskSelected() {
-                    getParentFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new NewTaskFragment())
-                            .addToBackStack(null)
-                            .commit();
-                }
-
-                @Override
-                public void onAddHabitSelected() {
-                    getParentFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, new NewHabitFragment())
-                            .addToBackStack(null)
-                            .commit();
-                }
-            });
-            bottomSheet.show(getParentFragmentManager(), "AddSelectionBottomSheet");
-        });
+        if (icAdd != null) {
+            icAdd.setOnClickListener(v -> requireActivity().getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, new NewTaskFragment())
+                    .addToBackStack(null)
+                    .commit());
+        } else {
+            Log.e("HomeFragment", "ic_add button not found in layout");
+        }
     }
 
     private void setupEventListeners() {
-        eventAdapter.setOnItemClickListener(item -> {
-            if (item.getType() == EventItem.TYPE_TASK) {
-                new EditTaskBottomSheetFragment(item.getTask())
-                        .show(getParentFragmentManager(), "EditTaskBottomSheet");
-            } else if (item.getType() == EventItem.TYPE_HABIT) {
-                new EditHabitBottomSheetFragment(item.getHabit())
-                        .show(getParentFragmentManager(), "EditHabitBottomSheet");
-            }
+        eventAdapter.setOnItemClickListener(task -> {
+            new EditTaskBottomSheetFragment(task)
+                    .show(getParentFragmentManager(), "EditTaskBottomSheet");
         });
     }
 
-    private void updateEventList() {
-        eventList.clear();
+    private void updateTaskList(List<TaskEntity> tasks) {
+        taskList.clear();
+        taskList.addAll(tasks);
 
-        for (TaskEntity task : currentTasks) {
-            eventList.add(new EventItem(task, task.isChecked()));
-        }
+        // Görevleri saate göre sırala
+        Collections.sort(taskList, (t1, t2) -> compareTimeStrings(t1.getTime(), t2.getTime()));
 
-        for (HabitEntity habit : currentHabits) {
-            if (habit.isScheduledForDate(selectedDate)) {
-                boolean checked = false;
-                for (HabitCheckEntity check : currentHabitChecks) {
-                    if (check.getHabitId() == habit.getId()) {
-                        checked = check.isChecked();
-                        break;
-                    }
-                }
-                eventList.add(new EventItem(habit, checked));
-            }
-        }
-
-        // Sırala ve bildir
-        Collections.sort(eventList, (e1, e2) -> {
-            String time1 = e1.getType() == EventItem.TYPE_TASK ? e1.getTask().getTime() : e1.getHabit().getTime();
-            String time2 = e2.getType() == EventItem.TYPE_TASK ? e2.getTask().getTime() : e2.getHabit().getTime();
-            return compareTimeStrings(time1, time2);
-        });
-
-        eventAdapter.setEventList(eventList);
-        eventAdapter.setSelectedDate(selectedDate);
+        eventAdapter.setTaskList(taskList);
     }
 
-    private String getTodayDate() {
+    private static String getTodayDate() {
         return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
     }
 
     private int compareTimeStrings(String t1, String t2) {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-            return sdf.parse(t1).compareTo(sdf.parse(t2));
+            Date d1 = sdf.parse(t1);
+            Date d2 = sdf.parse(t2);
+            if (d1 != null && d2 != null) return d1.compareTo(d2);
         } catch (Exception e) {
-            return t1.compareTo(t2);
+            Log.e("HomeFragment", "Time parsing error: " + e.getMessage());
         }
+        return t1.compareTo(t2);
     }
 }
