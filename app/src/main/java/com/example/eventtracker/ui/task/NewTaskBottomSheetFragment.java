@@ -20,18 +20,18 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.eventtracker.R;
 import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.viewmodel.TaskViewModel;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class NewTaskFragment extends Fragment {
-
+public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment {
     private EditText taskNameEditText, taskDateEditText, taskTimeEditText;
     private TaskViewModel taskViewModel;
     private final Calendar calendar = Calendar.getInstance();
 
-    public NewTaskFragment() {}
+    public NewTaskBottomSheetFragment() {}
 
     @Nullable
     @Override
@@ -75,11 +75,11 @@ public class NewTaskFragment extends Fragment {
             taskViewModel.insert(task);
 
             Toast.makeText(getContext(), "Task Added", Toast.LENGTH_SHORT).show();
-            requireActivity().getSupportFragmentManager().popBackStack();
+            dismiss();
         });
 
         //cancel
-        cancelText.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+        cancelText.setOnClickListener(v -> dismiss());
 
         return view;
     }

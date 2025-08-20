@@ -52,7 +52,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.icon.setImageResource(R.drawable.ic_task);
         holder.name.setText(task.getName());
         holder.time.setText(task.getTime());
-        holder.type.setText("Task");
         holder.checked.setChecked(task.isChecked());
         holder.checked.setEnabled(true);
 
@@ -78,7 +77,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
         ImageView icon;
-        TextView name, time, type;
+        TextView name, time;
         CheckBox checked;
 
         public EventViewHolder(@NonNull View itemView) {
@@ -86,7 +85,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             icon = itemView.findViewById(R.id.eventIcon);
             name = itemView.findViewById(R.id.eventName);
             time = itemView.findViewById(R.id.eventTime);
-            type = itemView.findViewById(R.id.eventType);
             checked = itemView.findViewById(R.id.eventChecker);
         }
     }

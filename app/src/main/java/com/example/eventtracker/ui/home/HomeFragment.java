@@ -17,7 +17,7 @@ import com.example.eventtracker.R;
 import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.ui.adapter.EventAdapter;
 import com.example.eventtracker.ui.task.EditTaskBottomSheetFragment;
-import com.example.eventtracker.ui.task.NewTaskFragment;
+import com.example.eventtracker.ui.task.NewTaskBottomSheetFragment;
 import com.example.eventtracker.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
@@ -71,11 +71,9 @@ public class HomeFragment extends Fragment {
     private void setupAddButton(View view) {
         View icAdd = view.findViewById(R.id.ic_add);
         if (icAdd != null) {
-            icAdd.setOnClickListener(v -> requireActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new NewTaskFragment())
-                    .addToBackStack(null)
-                    .commit());
+            icAdd.setOnClickListener(v -> {
+                new NewTaskBottomSheetFragment().show(getParentFragmentManager(), "NewTaskBottomSheet");
+            });
         } else {
             Log.e("HomeFragment", "ic_add button not found in layout");
         }
