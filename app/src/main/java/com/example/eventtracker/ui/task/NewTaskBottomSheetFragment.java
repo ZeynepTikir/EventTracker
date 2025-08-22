@@ -66,7 +66,7 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
         imageViewIcon.setOnClickListener(v -> {
             IconPickerDialog dialog = new IconPickerDialog();
             dialog.setTargetFragment(this, 0);
-            dialog.show(getParentFragmentManager(), "icon_picker");
+            dialog.show(getParentFragmentManager(),  getString(R.string.dialog_icon_picker));
         });
 
         // Date ve Time picker
@@ -80,7 +80,7 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
             String time = taskTimeEditText.getText().toString().trim();
 
             if (TextUtils.isEmpty(name) || TextUtils.isEmpty(date) || TextUtils.isEmpty(time)) {
-                Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -93,7 +93,7 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
 
             taskViewModel.insert(task);
 
-            Toast.makeText(getContext(), "Task Added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.toast_task_added), Toast.LENGTH_SHORT).show();
             dismiss();
         });
 
@@ -110,7 +110,7 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
         new DatePickerDialog(requireContext(),
                 (view, year, month, dayOfMonth) -> {
                     calendar.set(year, month, dayOfMonth);
-                    String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    String formattedDate = new SimpleDateFormat( getString(R.string.date_format), Locale.getDefault())
                             .format(calendar.getTime());
                     taskDateEditText.setText(formattedDate);
                 },
@@ -125,7 +125,7 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
                 (view, hourOfDay, minute) -> {
                     calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     calendar.set(Calendar.MINUTE, minute);
-                    String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute);
+                    String formattedTime = String.format(Locale.getDefault(), getString(R.string.time_format), hourOfDay, minute);
                     taskTimeEditText.setText(formattedTime);
                 },
                 calendar.get(Calendar.HOUR_OF_DAY),
@@ -136,7 +136,7 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
 
     @Override
     public void onIconSelected(int iconResId) {
-        Log.d("IconPickerDialog", "Selected icon: " + iconResId);
+        //Log.d("IconPickerDialog", "Selected icon: " + iconResId);
         selectedIconResId = iconResId;
         imageViewIcon.setImageResource(iconResId);
     }

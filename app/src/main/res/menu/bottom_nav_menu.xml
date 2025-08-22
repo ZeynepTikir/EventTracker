@@ -4,26 +4,26 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:title="@string/nav_home" />
 
     <item
         android:id="@+id/navigation_pomodoro"
         android:icon="@drawable/ic_pomodoro"
-        android:title="Pomodoro" />
+        android:title="@string/nav_pomodoro" />
 
     <item
         android:id="@+id/navigation_calendar"
         android:icon="@drawable/ic_calendar"
-        android:title="Calendar" />
+        android:title="@string/nav_calendar" />
 
     <item
         android:id="@+id/navigation_habits"
         android:icon="@drawable/ic_habits"
-        android:title="Habits" />
+        android:title="@string/nav_habits" />
 
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+        android:title="@string/nav_settings" />
 
 </menu>

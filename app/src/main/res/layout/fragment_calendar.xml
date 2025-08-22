@@ -13,7 +13,7 @@
     <!-- Başlık -->
     <TextView
         android:id="@+id/title"
-        android:text="Takvim"
+        android:text="@string/calendar_title"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/textcolor"
@@ -60,7 +60,7 @@
     <!-- Seçilen tarih -->
     <TextView
         android:id="@+id/textSelectedDate"
-        android:text="Seçilen Gün: "
+        android:text="@string/selected_date"
         android:textSize="16sp"
         android:textStyle="italic"
         android:textColor="@color/textcolor"
@@ -71,7 +71,7 @@
     <!-- Planlanan Görevler başlığı -->
     <TextView
         android:id="@+id/plannedTitle"
-        android:text="Planlanan Görevler:"
+        android:text="@string/planned_tasks"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/textcolor"

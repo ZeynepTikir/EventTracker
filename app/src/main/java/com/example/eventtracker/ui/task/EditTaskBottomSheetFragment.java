@@ -52,7 +52,7 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_new_task, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit_task, container, false);
 
         title = view.findViewById(R.id.title);
         taskNameEditText = view.findViewById(R.id.taskNameEditText);
@@ -65,8 +65,6 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment
         applyThemeColors(view);
 
         taskViewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
-
-        title.setText("Edit Task");
 
         // Mevcut task bilgilerini doldur
         if (task != null) {
@@ -91,14 +89,13 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment
         taskTimeEditText.setOnClickListener(v -> showTimePicker());
 
         // Update button
-        updateButton.setText("Update");
         updateButton.setOnClickListener(v -> {
             String name = taskNameEditText.getText().toString().trim();
             String date = taskDateEditText.getText().toString().trim();
             String time = taskTimeEditText.getText().toString().trim();
 
             if (TextUtils.isEmpty(name) || TextUtils.isEmpty(date) || TextUtils.isEmpty(time)) {
-                Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -111,19 +108,19 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment
             dismiss();
         });
 
-        // Delete button
-        deleteText.setText("Delete");
+// Delete button
         deleteText.setOnClickListener(v -> {
             new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                    .setTitle("Delete Task")
-                    .setMessage("Are you sure you want to delete this task?")
-                    .setPositiveButton("Yes", (dialog, which) -> {
+                    .setTitle(getString(R.string.delete_task))
+                    .setMessage(getString(R.string.delete_task_confirm))
+                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
                         taskViewModel.delete(task);
                         dismiss();
                     })
-                    .setNegativeButton("Cancel", null)
+                    .setNegativeButton(getString(R.string.cancel), null)
                     .show();
         });
+
 
         return view;
     }
@@ -132,7 +129,7 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment
         new DatePickerDialog(requireContext(),
                 (view, year, month, dayOfMonth) -> {
                     calendar.set(year, month, dayOfMonth);
-                    String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                    String formattedDate = new SimpleDateFormat(getString(R.string.date_format), Locale.getDefault())
                             .format(calendar.getTime());
                     taskDateEditText.setText(formattedDate);
                 },
@@ -147,7 +144,7 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment
                 (view, hourOfDay, minute) -> {
                     calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     calendar.set(Calendar.MINUTE, minute);
-                    String formattedTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute);
+                    String formattedTime = String.format(Locale.getDefault(), getString(R.string.time_format), hourOfDay, minute);
                     taskTimeEditText.setText(formattedTime);
                 },
                 calendar.get(Calendar.HOUR_OF_DAY),

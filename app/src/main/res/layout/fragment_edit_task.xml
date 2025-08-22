@@ -14,7 +14,7 @@
         android:id="@+id/title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/new_task_title"
+        android:text="@string/edit_task_title"
         android:textSize="22sp"
         android:textColor="@color/textcolor"
         android:textStyle="bold"
@@ -48,7 +48,6 @@
                 android:layout_height="match_parent"
                 android:padding="0dp"
                 android:background="@color/button"
-
                 app:tint="@color/background"
                 android:scaleType="centerInside"/>
         </androidx.cardview.widget.CardView>
@@ -90,7 +89,6 @@
             android:inputType="date"
             android:textColorHint="@color/textcolor"
             android:textColor="@color/textcolor"
-
             android:background="@drawable/rounded_edittext"
             android:padding="12dp"
             android:textSize="16sp"
@@ -106,18 +104,17 @@
             android:inputType="time"
             android:textColorHint="@color/textcolor"
             android:textColor="@color/textcolor"
-
             android:background="@drawable/rounded_edittext"
             android:padding="12dp"
             android:textSize="16sp"/>
     </LinearLayout>
 
-    <!-- Ekle Butonu -->
+    <!-- Update Butonu -->
     <Button
         android:id="@+id/addButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_button"
+        android:text="@string/update_button"
         android:textSize="16sp"
         android:textColor="@color/buttonText"
         android:backgroundTint="@color/button"
@@ -125,12 +122,12 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="24dp"/>
 
-    <!-- Cancel -->
+    <!-- Delete -->
     <TextView
         android:id="@+id/cancelText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cancel"
+        android:text="@string/delete"
         android:textColor="@color/cancelColor"
         android:textSize="14sp"
         android:textAlignment="center"

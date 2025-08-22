@@ -1,6 +1,8 @@
 package com.example.eventtracker;
 
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +15,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
-import com.example.eventtracker.ui.CalendarFragment;
+import com.example.eventtracker.ui.navfragments.CalendarFragment;
 import com.example.eventtracker.ui.navfragments.HomeFragment;
 import com.example.eventtracker.ui.navfragments.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String langCode = prefs.getString("language", "en"); // varsayılan en
+        setLocale(langCode);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -68,6 +76,14 @@ public class MainActivity extends AppCompatActivity {
                     .replace(R.id.fragment_container, selected)
                     .commit();
         }
+    }
+
+    private void setLocale(String langCode) {
+        Locale locale = new Locale(langCode);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
     public void refreshTheme(boolean darkMode) {

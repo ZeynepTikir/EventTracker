@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:text="Settings"
+            android:text="@string/settings_title"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/textcolor"
@@ -41,7 +41,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Theme"
+                android:text="@string/theme"
                 android:textColor="@color/textcolor"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/textcolor"
-                    android:text="Light"/>
+                    android:text="@string/light_theme"/>
 
                 <RadioButton
                     android:id="@+id/radioDark"
@@ -65,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/textcolor"
                     android:shadowColor="@color/textcolor"
-                    android:text="Dark"/>
+                    android:text="@string/dark_theme"/>
             </RadioGroup>
         </LinearLayout>
 
@@ -83,7 +83,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Language"
+                android:text="@string/language"
                 android:textColor="@color/textcolor"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -108,7 +108,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Enable Notifications"
+                android:text="@string/enable_notifications"
                 android:textColor="@color/textcolor"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
@@ -124,7 +124,7 @@
             android:id="@+id/clearDataButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Clear App Data"
+            android:text="@string/clear_app_data"
             android:textSize="16sp"
             android:textColor="@color/buttonText"
             android:backgroundTint="@color/button"

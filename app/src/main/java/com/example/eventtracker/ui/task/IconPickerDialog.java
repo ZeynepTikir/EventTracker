@@ -41,7 +41,7 @@ public class IconPickerDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Select Icon");
+        builder.setTitle(R.string.select_icon);
 
         // Düzeltme: root layout'u alıyoruz
         final android.view.View dialogView = getLayoutInflater()

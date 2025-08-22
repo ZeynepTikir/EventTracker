@@ -41,7 +41,7 @@ android:gravity="center_vertical">
         android:id="@+id/eventName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Event Name"
+        android:text="@string/event_name"
         android:textColor="@color/textcolor"
         android:textStyle="bold"
         android:textSize="15sp"
@@ -65,7 +65,7 @@ android:gravity="center_vertical">
             android:id="@+id/eventTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Time"
+            android:text="@string/event_time"
             android:textColor="@color/textcolor"
             android:textSize="13sp" />
     </LinearLayout>

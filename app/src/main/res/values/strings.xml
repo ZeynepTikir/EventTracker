@@ -1,5 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">EventTracker</string>
+        <!-- MainActivity / BottomNavigation -->
+        <string name="app_name">EventTracker</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+        <!-- CalendarFragment -->
+        <string name="calendar_title">Calendar</string>
+        <string name="selected_date">Selected Date: </string>
+        <string name="planned_tasks">Planned Tasks:</string>
+        <string name="selected_day">Selected Day: %s</string>
+        <string name="selected_day_format">%1$d/%2$d/%3$d</string>
+
+
+        <!-- HomeFragment -->
+        <string name="home_today">Today</string>
+
+        <!-- NewTaskFragment / EditTaskFragment -->
+        <string name="new_task_title">New Task</string>
+        <string name="task_name_hint">Task Name</string>
+        <string name="date_hint">Date</string>
+        <string name="time_hint">Time</string>
+        <string name="add_button">+ Add</string>
+        <string name="cancel">Cancel</string>
+
+        <string name="toast_task_added">Task Added</string>
+        <string name="dialog_icon_picker">icon_picker</string>
+        <string name="date_format">yyyy-MM-dd</string>
+        <string name="time_format">%02d:%02d</string>
+
+        <!-- EditTaskBottomSheetFragment -->
+        <string name="edit_task_title">Edit Task</string>
+        <string name="update_button">Update</string>
+        <string name="delete">Delete</string>
+
+        <string name="fill_all_fields">Please fill all fields</string>
+        <string name="delete_task">Delete Task</string>
+        <string name="delete_task_confirm">Are you sure you want to delete this task?</string>
+        <string name="yes">Yes</string>
+
+        <!-- IconPickerDialog -->
+        <string name="select_icon">Select Icon</string>
+
+        <!-- SettingsFragment -->
+        <string name="settings_title">Settings</string>
+        <string name="theme">Theme</string>
+        <string name="light_theme">Light</string>
+        <string name="dark_theme">Dark</string>
+        <string name="language">Language</string>
+        <string name="enable_notifications">Enable Notifications</string>
+        <string name="clear_app_data">Clear App Data</string>
+        <string name="clear_app_data_message">Are you sure you want to clear all app data? This action cannot be undone.</string>
+        <string name="app_data_cleared">App data cleared</string>
+
+
+        <!-- Item Event -->
+        <string name="event_name">Event Name</string>
+        <string name="event_time">Time</string>
+        <string name="add_description">Add</string>
+
+        <!-- BottomNavigation titles -->
+        <string name="nav_home">Home</string>
+        <string name="nav_pomodoro">Pomodoro</string>
+        <string name="nav_calendar">Calendar</string>
+        <string name="nav_habits">Habits</string>
+        <string name="nav_settings">Settings</string>
 </resources>

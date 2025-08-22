@@ -2,6 +2,7 @@ package com.example.eventtracker.ui.navfragments;
 
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import androidx.preference.PreferenceManager;
 import com.example.eventtracker.MainActivity;
 import com.example.eventtracker.R;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+
+import java.util.Locale;
 
 public class SettingsFragment extends Fragment {
 
@@ -53,41 +56,27 @@ public class SettingsFragment extends Fragment {
         clearDataButton = view.findViewById(R.id.clearDataButton);
         settingsTitle = view.findViewById(R.id.settingsTitle);
 
-        // Önceki ayarları yükle
+        // Önceki tema ayarını yükle
         boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
-        Bundle args = getArguments();
-        if (args != null) {
-            isDarkMode = args.getBoolean("isDarkMode", false);
-        }
-        if (isDarkMode) {
-            radioDark.setChecked(true);
-        } else {
-            radioLight.setChecked(true);
-        }
+        if (isDarkMode) radioDark.setChecked(true);
+        else radioLight.setChecked(true);
 
-        // Renkleri uygula
+        // Tema renklerini uygula
         applyThemeColors(view, isDarkMode);
 
+        // Bildirim ayarını yükle
         boolean notifications = sharedPreferences.getBoolean("notifications", true);
         notificationSwitch.setChecked(notifications);
 
-        // Tema seçimi dinleyici
+        // Tema değişikliği dinleyici
         themeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             boolean darkModeSelected = checkedId == R.id.radioDark;
-
-            // Preference kaydet
             sharedPreferences.edit().putBoolean("dark_mode", darkModeSelected).apply();
-
-            // Renkleri uygula
             applyThemeColors(view, darkModeSelected);
-
-            // MainActivity'yi yeniden başlatarak tüm renkleri uygula
             if (getActivity() instanceof MainActivity) {
                 ((MainActivity) getActivity()).refreshTheme(darkModeSelected);
             }
-
         });
-
 
         // Bildirim listener
         notificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
@@ -95,30 +84,68 @@ public class SettingsFragment extends Fragment {
         );
 
         // Dil spinner
-        String[] languages = {"English", "Turkish", "Spanish"};
+        String[] languages = {"English", "Türkçe", "Español"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_spinner_item, languages);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         languageSpinner.setAdapter(adapter);
 
+        // Önceki dili yükle ve spinner'ı ayarla
+        String savedLanguage = sharedPreferences.getString("language", "en");
+        int spinnerPosition = 0;
+        switch (savedLanguage) {
+            case "tr": spinnerPosition = 1; break;
+            case "es": spinnerPosition = 2; break;
+        }
+        languageSpinner.setSelection(spinnerPosition);
+
+        // Dil değişikliği listener
+        languageSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                String langCode = "en";
+                switch (position) {
+                    case 1: langCode = "tr"; break;
+                    case 2: langCode = "es"; break;
+                }
+                String currentLang = sharedPreferences.getString("language", "en");
+                if (!currentLang.equals(langCode)) {
+                    sharedPreferences.edit().putString("language", langCode).apply();
+                    updateLocale(langCode);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        });
+
         // Clear data butonu
         clearDataButton.setOnClickListener(v -> {
             new androidx.appcompat.app.AlertDialog.Builder(requireContext())
-                    .setTitle("Clear App Data")
-                    .setMessage("Are you sure you want to clear all app data? This action cannot be undone.")
-                    .setPositiveButton("Yes", (dialog, which) -> {
-                        // SharedPreferences temizleme
+                    .setTitle(R.string.clear_app_data)
+                    .setMessage(R.string.clear_app_data_message)
+                    .setPositiveButton(R.string.yes, (dialog, which) -> {
                         sharedPreferences.edit().clear().apply();
-                        Toast.makeText(requireContext(), "App data cleared", Toast.LENGTH_SHORT).show();
-
-                        // Settings fragment’i yeniden yükle
+                        Toast.makeText(requireContext(), R.string.app_data_cleared, Toast.LENGTH_SHORT).show();
                         requireActivity().recreate();
                     })
-                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                     .show();
         });
 
         return view;
+    }
+
+    // Locale güncelleme
+    private void updateLocale(String langCode) {
+        Locale locale = new Locale(langCode);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        requireContext().getResources().updateConfiguration(config, requireContext().getResources().getDisplayMetrics());
+
+        // Activity yeniden başlat
+        requireActivity().recreate();
     }
 
     public void applyThemeColors(View root, boolean darkMode) {
@@ -138,13 +165,9 @@ public class SettingsFragment extends Fragment {
                 ? getResources().getColor(R.color.dark_button_text, null)
                 : getResources().getColor(R.color.buttonText, null);
 
-        // Arka plan
         root.setBackgroundColor(bgColor);
-
-        // Tüm text tabanlı view'lerin rengini ayarla
         setTextColorsRecursively(root, textColor);
 
-        // Sadece buton özel: arka plan + text rengi
         clearDataButton.setBackgroundTintList(ColorStateList.valueOf(buttonColor));
         clearDataButton.setTextColor(buttonTextColor);
     }
@@ -159,7 +182,4 @@ public class SettingsFragment extends Fragment {
             }
         }
     }
-
-
-
 }

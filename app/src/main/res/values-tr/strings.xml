@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- MainActivity / BottomNavigation -->
+    <string name="app_name">EventTracker</string>
+
+    <!-- CalendarFragment -->
+    <string name="calendar_title">Takvim</string>
+    <string name="selected_date">Seçilen Gün: </string>
+    <string name="planned_tasks">Planlanan Görevler:</string>
+    <string name="selected_day">Seçilen Gün: %s</string>
+    <string name="selected_day_format">%1$d/%2$d/%3$d</string>
+
+    <!-- HomeFragment -->
+    <string name="home_today">Bugün</string>
+
+    <!-- NewTaskFragment / EditTaskFragment -->
+    <string name="new_task_title">Yeni Görev</string>
+    <string name="task_name_hint">Görev Adı</string>
+    <string name="date_hint">Tarih</string>
+    <string name="time_hint">Saat</string>
+    <string name="add_button">+ Ekle</string>
+    <string name="cancel">İptal</string>
+
+    <string name="toast_task_added">Görev eklendi</string>
+    <string name="dialog_icon_picker">ikon_seçici</string>
+    <string name="date_format">yyyy-MM-dd</string>
+    <string name="time_format">%02d:%02d</string>
+
+    <!-- EditTaskBottomSheetFragment -->
+    <string name="edit_task_title">Görevi Düzenle</string>
+    <string name="update_button">Güncelle</string>
+    <string name="delete">Sil</string>
+
+    <string name="fill_all_fields">Lütfen tüm alanları doldurun</string>
+    <string name="delete_task">Görevi Sil</string>
+    <string name="delete_task_confirm">Bu görevi silmek istediğinize emin misiniz?</string>
+    <string name="yes">Evet</string>
+
+    <!-- IconPickerDialog -->
+    <string name="select_icon">İkon Seç</string>
+
+    <!-- SettingsFragment -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="theme">Tema</string>
+    <string name="light_theme">Açık</string>
+    <string name="dark_theme">Koyu</string>
+    <string name="language">Dil</string>
+    <string name="enable_notifications">Bildirimleri Aç</string>
+    <string name="clear_app_data">Uygulama Verilerini Temizle</string>
+    <string name="clear_app_data_message">Tüm uygulama verilerini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>
+    <string name="app_data_cleared">Uygulama verileri silindi</string>
+
+    <!-- Item Event -->
+    <string name="event_name">Etkinlik Adı</string>
+    <string name="event_time">Saat</string>
+    <string name="add_description">Ekle</string>
+
+    <!-- BottomNavigation titles -->
+    <string name="nav_home">Ana Sayfa</string>
+    <string name="nav_pomodoro">Pomodoro</string>
+    <string name="nav_calendar">Takvim</string>
+    <string name="nav_habits">Alışkanlıklar</string>
+    <string name="nav_settings">Ayarlar</string>
+</resources>
+

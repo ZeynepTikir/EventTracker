@@ -1,4 +1,4 @@
-package com.example.eventtracker.ui;
+package com.example.eventtracker.ui.navfragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -62,7 +62,8 @@ public class CalendarFragment extends Fragment {
 
         // İlk açılışta bugünün tarihi
         selectedDate = dbFormat.format(new Date(calendarView.getDate()));
-        textSelectedDate.setText("Seçilen Gün: " + displayFormat.format(new Date(calendarView.getDate())));
+        String today = displayFormat.format(new Date(calendarView.getDate()));
+        textSelectedDate.setText(getString(R.string.selected_day, today));
 
         // Adapter oluştur
         eventAdapter = new EventAdapter(new ArrayList<>(), taskViewModel);
@@ -73,7 +74,8 @@ public class CalendarFragment extends Fragment {
         // Tarih seçilince
         calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
             selectedDate = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, dayOfMonth);
-            textSelectedDate.setText("Seçilen Gün: " + dayOfMonth + "/" + (month + 1) + "/" + year);
+            String formattedDate = getString(R.string.selected_day_format, dayOfMonth, month + 1, year);
+            textSelectedDate.setText(getString(R.string.selected_day, formattedDate));
 
             observeTasksByDate(selectedDate);
         });
