@@ -2,10 +2,24 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="button">#6750A4</color> <!--  Butterfly Bush -->
-    <color name="bg">#F4EBFB</color>
-    <color name="textcolor">#403559</color>
+
+    <!-- light theme -->
+    <color name="background">#F4F3F3</color>
+    <color name="cardBackground">#FFFFFF</color>
+    <color name="textcolor">#382F4E</color>
+    <color name="button">#6750A4</color>
+    <color name="buttonText">#FFFFFF</color>
     <color name="cancelColor">#545454</color>
+    <color name="calendarHeaderBackground">#E0E0E0</color>
+
+    <!-- dark theme -->
+    <color name="dark_background">#1B1B1B</color>
+    <color name="dark_cardBackground">#424242</color>
+    <color name="dark_textcolor">#E6DCF8</color>
+    <color name="dark_button">#AA93E7</color>
+    <color name="dark_button_text">#1B1B1B</color>
+    <color name="dark_cancelColor">#D0CFCF</color>
+    <color name="dark_calendarHeaderBackground">#D7D7D7</color>
 
 
 </resources>

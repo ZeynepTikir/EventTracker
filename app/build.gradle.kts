@@ -45,6 +45,7 @@ dependencies {
 
     // Room runtime
     implementation("androidx.room:room-runtime:2.7.2")
+    implementation(libs.preference)
 
     // Room annotation processor (Java projelerde annotationProcessor olarak eklenmeli)
     annotationProcessor("androidx.room:room-compiler:2.7.2")

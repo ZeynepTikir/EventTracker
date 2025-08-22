@@ -1,15 +1,20 @@
-package com.example.eventtracker.ui.home;
+package com.example.eventtracker.ui.navfragments;
 
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,9 +37,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private EventAdapter eventAdapter;
     private final List<TaskEntity> taskList = new ArrayList<>();
-
     private TaskViewModel taskViewModel;
-
+    private boolean isDarkMode;
     private final String selectedDate = getTodayDate();
 
     @Nullable
@@ -43,6 +47,14 @@ public class HomeFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // Tema durumu
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
+
+        // Renkleri uygula
+        applyThemeColors(view, isDarkMode);
+
 
         recyclerView = view.findViewById(R.id.recyclerEvents);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -66,6 +78,41 @@ public class HomeFragment extends Fragment {
         taskViewModel.getTasksByDate(selectedDate).observe(getViewLifecycleOwner(), tasks -> {
             updateTaskList(tasks != null ? tasks : new ArrayList<>());
         });
+    }
+
+    // 🔽 Tema renklerini uygula
+    private void applyThemeColors(View root, boolean darkMode) {
+        int bgColor = darkMode
+                ? getResources().getColor(R.color.dark_background, null)
+                : getResources().getColor(R.color.background, null);
+
+        int textColor = darkMode
+                ? getResources().getColor(R.color.dark_textcolor, null)
+                : getResources().getColor(R.color.textcolor, null);
+
+        int iconColor = textColor; // artı ikonu için
+
+        // Arka plan
+        root.setBackgroundColor(bgColor);
+
+        // Tüm yazıları değiştir
+        setTextColorsRecursively(root, textColor);
+
+        // Artı ikonunun rengi
+        ImageView icAdd = root.findViewById(R.id.ic_add);
+        if (icAdd != null) icAdd.setImageTintList(ColorStateList.valueOf(iconColor));
+    }
+
+    // 🔽 Recursive text color setter
+    private void setTextColorsRecursively(View view, int textColor) {
+        if (view instanceof TextView) {
+            ((TextView) view).setTextColor(textColor);
+        } else if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                setTextColorsRecursively(group.getChildAt(i), textColor);
+            }
+        }
     }
 
     private void setupAddButton(View view) {

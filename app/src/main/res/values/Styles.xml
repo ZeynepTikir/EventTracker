@@ -14,4 +14,32 @@
         <!-- <item name="android:paddingLeft">8dp</item>  Eskiden 12dp idi -->
     </style>
 
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/dark_button</item>
+        <item name="android:textColorPrimary">@color/textcolor</item>
+    </style>
+
+    <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/textcolor</item>
+    </style>
+
+    <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/textcolor</item>
+    </style>
+
+    <!-- Dark Theme for Calendar -->
+    <style name="CalenderViewCustomDark" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/button</item>
+        <item name="android:textColorPrimary">@color/dark_textcolor</item>
+    </style>
+
+    <style name="CalenderViewDateCustomTextDark" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/dark_textcolor</item>
+    </style>
+
+    <style name="CalenderViewWeekCustomTextDark" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/dark_textcolor</item>
+    </style>
+
+
 </resources>

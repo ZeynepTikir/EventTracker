@@ -49,7 +49,7 @@
                 android:padding="0dp"
                 android:background="@color/button"
 
-                app:tint="@color/white"
+                app:tint="@color/background"
                 android:scaleType="centerInside"/>
         </androidx.cardview.widget.CardView>
 
@@ -60,6 +60,8 @@
             android:layout_weight="1"
             android:hint="Task Name"
             android:inputType="text"
+            android:textColorHint="@color/textcolor"
+            android:textColor="@color/textcolor"
             android:background="@drawable/rounded_edittext"
             android:padding="12dp"
             android:textSize="16sp"
@@ -86,6 +88,9 @@
             android:hint="Date"
             android:focusable="false"
             android:inputType="date"
+            android:textColorHint="@color/textcolor"
+            android:textColor="@color/textcolor"
+
             android:background="@drawable/rounded_edittext"
             android:padding="12dp"
             android:textSize="16sp"
@@ -99,6 +104,9 @@
             android:hint="Time"
             android:focusable="false"
             android:inputType="time"
+            android:textColorHint="@color/textcolor"
+            android:textColor="@color/textcolor"
+
             android:background="@drawable/rounded_edittext"
             android:padding="12dp"
             android:textSize="16sp"/>
@@ -111,7 +119,7 @@
         android:layout_height="wrap_content"
         android:text="+ Add"
         android:textSize="16sp"
-        android:textColor="@color/white"
+        android:textColor="@color/buttonText"
         android:backgroundTint="@color/button"
         app:layout_constraintTop_toBottomOf="@id/dateTimeLayout"
         app:layout_constraintStart_toStartOf="parent"

@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,6 +50,8 @@ public class CalendarFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
+        applyThemeColors(view);
+
         calendarView = view.findViewById(R.id.calendarView);
         textSelectedDate = view.findViewById(R.id.textSelectedDate);
         recyclerViewEvents = view.findViewById(R.id.recyclerViewEvents);
@@ -81,5 +86,51 @@ public class CalendarFragment extends Fragment {
             List<TaskEntity> taskList = tasks != null ? tasks : new ArrayList<>();
             eventAdapter.setTaskList(taskList);
         });
+    }
+
+    private void applyThemeColors(View rootView) {
+        boolean darkMode = PreferenceManager.getDefaultSharedPreferences(requireContext())
+                .getBoolean("dark_mode", false);
+
+        int backgroundColor = ContextCompat.getColor(requireContext(),
+                darkMode ? R.color.dark_background : R.color.background);
+        int cardColor = ContextCompat.getColor(requireContext(),
+                darkMode ? R.color.dark_cardBackground : R.color.cardBackground);
+        int textColor = ContextCompat.getColor(requireContext(),
+                darkMode ? R.color.dark_textcolor : R.color.textcolor);
+
+        // Sayfa arka planı
+        rootView.setBackgroundColor(backgroundColor);
+
+        // Başlık ve alt yazılar
+        TextView title = rootView.findViewById(R.id.title);
+        TextView selectedDate = rootView.findViewById(R.id.textSelectedDate);
+        TextView plannedTitle = rootView.findViewById(R.id.plannedTitle);
+
+        if (title != null) title.setTextColor(textColor);
+        if (selectedDate != null) selectedDate.setTextColor(textColor);
+        if (plannedTitle != null) plannedTitle.setTextColor(textColor);
+
+        // CardView arka planı
+        CardView calendarCard = rootView.findViewById(R.id.calendarCard);
+        if (calendarCard != null) {
+            calendarCard.setCardBackgroundColor(cardColor);
+        }
+
+        // CalendarView renkleri
+        CalendarView calendar = rootView.findViewById(R.id.calendarView);
+        if (calendar != null) {
+            //Text colors
+            calendar.setWeekDayTextAppearance(darkMode ? R.style.CalenderViewWeekCustomTextDark : R.style.CalenderViewWeekCustomText);
+            calendar.setDateTextAppearance(darkMode ? R.style.CalenderViewDateCustomTextDark : R.style.CalenderViewDateCustomText);
+        }
+
+        View header = rootView.findViewById(R.id.calendarHeader);
+        if (header != null) {
+            int headerColor = ContextCompat.getColor(requireContext(),
+                    darkMode ? R.color.dark_calendarHeaderBackground : R.color.calendarHeaderBackground);
+            header.setBackgroundColor(headerColor);
+        }
+
     }
 }

@@ -12,6 +12,7 @@ cardview = "1.0.0"
 roomCompiler = "2.7.2"
 roomCommonJvm = "2.7.2"
 roomRuntimeAndroid = "2.7.2"
+preference = "1.2.1"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -26,6 +27,7 @@ cardview = { group = "androidx.cardview", name = "cardview", version.ref = "card
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomCompiler" }
 room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
 room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
+preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

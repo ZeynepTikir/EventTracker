@@ -1,5 +1,6 @@
 package com.example.eventtracker.ui.adapter;
 
+import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventtracker.R;
@@ -66,6 +69,9 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.checked.setChecked(task.isChecked());
         holder.checked.setEnabled(true);
 
+        // Tema renklerini uygula
+        applyThemeColors(holder);
+
         // Checked değişimini DB'ye yansıt
         holder.checked.setOnCheckedChangeListener((buttonView, isChecked) -> {
             task.setChecked(isChecked);
@@ -92,6 +98,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         ImageView icon;
         TextView name, time;
         CheckBox checked;
+        CardView cardView;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -99,6 +106,52 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
             name = itemView.findViewById(R.id.eventName);
             time = itemView.findViewById(R.id.eventTime);
             checked = itemView.findViewById(R.id.eventChecker);
+            cardView = itemView.findViewById(R.id.cardView);
         }
     }
+
+    // EventAdapter.java içinde, ViewHolder içinde veya adapter class seviyesinde ekle
+    private void applyThemeColors(EventViewHolder holder) {
+        boolean darkMode = PreferenceManager.getDefaultSharedPreferences(holder.itemView.getContext())
+                .getBoolean("dark_mode", false);
+
+        int cardColor = darkMode
+                ? holder.itemView.getResources().getColor(R.color.dark_cardBackground, null)
+                : holder.itemView.getResources().getColor(R.color.cardBackground, null);
+
+        int textColor = darkMode
+                ? holder.itemView.getResources().getColor(R.color.dark_textcolor, null)
+                : holder.itemView.getResources().getColor(R.color.textcolor, null);
+
+        int buttonColor = darkMode
+                ? holder.itemView.getResources().getColor(R.color.dark_button, null)
+                : holder.itemView.getResources().getColor(R.color.button, null);
+
+        int iconColor = textColor;
+
+        // CardView arka plan
+        holder.cardView.setCardBackgroundColor(cardColor);
+
+        // TextView renkleri
+        holder.name.setTextColor(textColor);
+        holder.time.setTextColor(textColor);
+
+        // Icon renkleri
+        holder.icon.setImageTintList(ColorStateList.valueOf(iconColor));
+
+        // ✅ Checkbox renkleri
+        ColorStateList checkBoxColors = new ColorStateList(
+                new int[][]{
+                        new int[]{android.R.attr.state_checked},   // checked
+                        new int[]{-android.R.attr.state_checked}   // unchecked
+                },
+                new int[]{
+                        buttonColor, // checked rengi
+                        buttonColor  // unchecked rengi
+                }
+        );
+        holder.checked.setButtonTintList(checkBoxColors);
+    }
+
+
 }

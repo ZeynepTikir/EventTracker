@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:background="@color/background"
     android:paddingTop="48dp"
     android:paddingHorizontal="4dp"
     android:paddingBottom="20dp">
@@ -24,6 +24,7 @@
 
     <!-- Takvim Card -->
     <androidx.cardview.widget.CardView
+        android:id="@+id/calendarCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -31,17 +32,29 @@
         android:layout_marginBottom="12dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="2dp"
-        app:cardBackgroundColor="@android:color/white">
+        app:cardBackgroundColor="@color/cardBackground">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <!-- Üst header arka planı -->
+        <View
+            android:id="@+id/calendarHeader"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/calendar_header_background"
+            android:layout_gravity="top"/>
 
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:focusedMonthDateColor="@color/textcolor"
-            android:unfocusedMonthDateColor="@color/textcolor"
-            android:weekSeparatorLineColor="@color/button"
-            android:selectedDateVerticalBar="@color/cancelColor" />
+            android:theme="@style/CalenderViewCustom"
+            android:dateTextAppearance="@style/CalenderViewDateCustomText"
+            android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"/>
+        </FrameLayout>
     </androidx.cardview.widget.CardView>
 
     <!-- Seçilen tarih -->
@@ -57,6 +70,7 @@
 
     <!-- Planlanan Görevler başlığı -->
     <TextView
+        android:id="@+id/plannedTitle"
         android:text="Planlanan Görevler:"
         android:textSize="18sp"
         android:textStyle="bold"
