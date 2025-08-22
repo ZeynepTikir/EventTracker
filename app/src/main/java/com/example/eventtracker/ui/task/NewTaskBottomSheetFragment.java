@@ -2,6 +2,8 @@ package com.example.eventtracker.ui.task;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,7 +18,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 
 import com.example.eventtracker.R;
 import com.example.eventtracker.data.model.TaskEntity;
@@ -33,6 +37,8 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
     private EditText taskNameEditText, taskDateEditText, taskTimeEditText;
     private ImageView imageViewIcon;
     private TaskViewModel taskViewModel;
+    private Button addButton;
+    private TextView title, cancelText;
     private final Calendar calendar = Calendar.getInstance();
     private int selectedIconResId = R.drawable.ic_task; // varsayılan icon
 
@@ -48,8 +54,11 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
         taskDateEditText = view.findViewById(R.id.taskDateEditText);
         taskTimeEditText = view.findViewById(R.id.taskTimeEditText);
         imageViewIcon = view.findViewById(R.id.imageViewIcon);
-        Button addButton = view.findViewById(R.id.addButton);
-        TextView cancelText = view.findViewById(R.id.cancelText);
+        addButton = view.findViewById(R.id.addButton);
+        cancelText = view.findViewById(R.id.cancelText);
+        title = view.findViewById(R.id.title);
+
+        applyThemeColors(view);
 
         taskViewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
 
@@ -130,5 +139,57 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
         Log.d("IconPickerDialog", "Selected icon: " + iconResId);
         selectedIconResId = iconResId;
         imageViewIcon.setImageResource(iconResId);
+    }
+
+    private void applyThemeColors(View rootView) {
+        boolean darkMode = PreferenceManager.getDefaultSharedPreferences(requireContext())
+                .getBoolean("dark_mode", false);
+
+        int backgroundColor = ContextCompat.getColor(requireContext(),
+                darkMode ? R.color.dark_background : R.color.background);
+        int cardColor = ContextCompat.getColor(requireContext(),
+                darkMode ? R.color.dark_cardBackground : R.color.cardBackground);
+        int textColor = ContextCompat.getColor(requireContext(),
+                darkMode ? R.color.dark_textcolor : R.color.textcolor);
+        int buttonColor = ContextCompat.getColor(requireContext(),
+                darkMode ? R.color.dark_button : R.color.button);
+        int buttonTextColor = ContextCompat.getColor(requireContext(),
+                darkMode ? R.color.dark_button_text : R.color.buttonText);
+        int cancelTextColor = ContextCompat.getColor(requireContext(),
+                darkMode ? R.color.dark_cancelColor : R.color.cancelColor);
+
+        // Sayfa ve card arkaplanı
+        rootView.setBackgroundColor(backgroundColor);
+
+        // Text ve EditText renkleri
+        title.setTextColor(textColor);
+        taskNameEditText.setTextColor(textColor);
+        taskDateEditText.setTextColor(textColor);
+        taskTimeEditText.setTextColor(textColor);
+
+        taskNameEditText.setHintTextColor(textColor);
+        taskDateEditText.setHintTextColor(textColor);
+        taskTimeEditText.setHintTextColor(textColor);
+
+        // EditText arka planını dinamik değiştirme
+        if (taskNameEditText.getBackground() instanceof GradientDrawable) {
+            GradientDrawable bg = (GradientDrawable) taskNameEditText.getBackground();
+            bg.setColor(cardColor);
+        }
+        if (taskDateEditText.getBackground() instanceof GradientDrawable) {
+            GradientDrawable bg = (GradientDrawable) taskDateEditText.getBackground();
+            bg.setColor(cardColor);
+        }
+        if (taskTimeEditText.getBackground() instanceof GradientDrawable) {
+            GradientDrawable bg = (GradientDrawable) taskTimeEditText.getBackground();
+            bg.setColor(cardColor);
+        }
+
+        // Buton
+        addButton.setBackgroundTintList(ColorStateList.valueOf(buttonColor));
+        addButton.setTextColor(ColorStateList.valueOf(buttonTextColor));
+
+        // Cancel Text rengi
+        cancelText.setTextColor(cancelTextColor);
     }
 }
