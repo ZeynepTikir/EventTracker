@@ -1,5 +1,6 @@
 package com.example.eventtracker.ui.adapter;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventtracker.R;
 import com.example.eventtracker.data.model.TaskEntity;
+import com.example.eventtracker.utils.AlarmHelper;
 import com.example.eventtracker.viewmodel.TaskViewModel;
 
 import java.util.List;
@@ -76,6 +78,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.checked.setOnCheckedChangeListener((buttonView, isChecked) -> {
             task.setChecked(isChecked);
             taskViewModel.update(task); // Room DB güncellemesi
+
+            // Context'i al
+            Context context = holder.itemView.getContext();
+
+            // Görev tamamlandıysa alarmı iptal et
+            if (isChecked) {
+                // Görev tamamlandı → alarm iptal
+                AlarmHelper.cancelTaskReminder(context, task);
+            } else {
+                // Görev tekrar aktif → alarm kur
+                AlarmHelper.scheduleTaskReminder(context, task);
+            }
         });
 
         holder.itemView.setOnClickListener(v -> {
