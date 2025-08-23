@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.eventtracker.R;
 import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.ui.adapter.EventAdapter;
+import com.example.eventtracker.ui.task.EditTaskBottomSheetFragment;
 import com.example.eventtracker.viewmodel.TaskViewModel;
 
 import java.text.SimpleDateFormat;
@@ -68,6 +69,8 @@ public class CalendarFragment extends Fragment {
         // Adapter oluştur
         eventAdapter = new EventAdapter(new ArrayList<>(), taskViewModel);
         recyclerViewEvents.setAdapter(eventAdapter);
+
+        setupEventListeners();
 
         observeTasksByDate(selectedDate);
 
@@ -134,5 +137,11 @@ public class CalendarFragment extends Fragment {
             header.setBackgroundColor(headerColor);
         }
 
+    }
+    private void setupEventListeners() {
+        eventAdapter.setOnItemClickListener(task -> {
+            new EditTaskBottomSheetFragment(task)
+                    .show(getParentFragmentManager(), "EditTaskBottomSheet");
+        });
     }
 }
