@@ -94,6 +94,29 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
+        <!-- Pomodoro Süre Ayarı -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="30dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/pomodoro_duration"
+                android:textColor="@color/textcolor"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <Spinner
+                android:id="@+id/durationSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
         <!-- Bildirim -->
         <LinearLayout
             android:layout_width="match_parent"

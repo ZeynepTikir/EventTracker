@@ -20,6 +20,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.eventtracker.ui.navfragments.CalendarFragment;
 import com.example.eventtracker.ui.navfragments.HomeFragment;
+import com.example.eventtracker.ui.navfragments.PomodoroFragment;
 import com.example.eventtracker.ui.navfragments.SettingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
             selected = new CalendarFragment();
         } else if (id == R.id.navigation_settings) {
             selected = new SettingsFragment();
+        }else if (id == R.id.navigation_pomodoro) {
+            selected = new PomodoroFragment();
         }
         if (selected != null) {
             getSupportFragmentManager()

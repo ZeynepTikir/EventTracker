@@ -3,6 +3,13 @@
     <!-- MainActivity / BottomNavigation -->
     <string name="app_name">EventTracker</string>
 
+    <!-- PomodoroFragment -->
+    <string name="pomodoro_title">Pomodoro</string>
+    <string name="pause">Pausar</string>
+    <string name="start">Iniciar</string>
+    <string name="reset">Reiniciar</string>
+    <string name="stop">Finalizar</string>
+
     <!-- CalendarFragment -->
     <string name="calendar_title">Calendario</string>
     <string name="selected_date">Fecha Seleccionada: </string>
@@ -46,6 +53,7 @@
     <string name="light_theme">Claro</string>
     <string name="dark_theme">Oscuro</string>
     <string name="language">Idioma</string>
+    <string name="pomodoro_duration">Duración del Pomodoro</string>
     <string name="enable_notifications">Activar Notificaciones</string>
     <string name="clear_app_data">Borrar Datos de la App</string>
     <string name="clear_app_data_message">¿Está seguro de que desea borrar todos los datos de la app? Esta acción no se puede deshacer.</string>

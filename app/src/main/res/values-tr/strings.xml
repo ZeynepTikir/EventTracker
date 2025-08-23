@@ -3,6 +3,13 @@
     <!-- MainActivity / BottomNavigation -->
     <string name="app_name">EventTracker</string>
 
+    <!-- PomodoroFragment -->
+    <string name="pomodoro_title">Pomodoro</string>
+    <string name="pause">Durdur</string>
+    <string name="start">Başlat</string>
+    <string name="reset">Sıfırla</string>
+    <string name="stop">Bitir</string>
+
     <!-- CalendarFragment -->
     <string name="calendar_title">Takvim</string>
     <string name="selected_date">Seçilen Gün: </string>
@@ -46,6 +53,7 @@
     <string name="light_theme">Açık</string>
     <string name="dark_theme">Koyu</string>
     <string name="language">Dil</string>
+    <string name="pomodoro_duration">Pomodoro Süresi</string>
     <string name="enable_notifications">Bildirimleri Aç</string>
     <string name="clear_app_data">Uygulama Verilerini Temizle</string>
     <string name="clear_app_data_message">Tüm uygulama verilerini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>

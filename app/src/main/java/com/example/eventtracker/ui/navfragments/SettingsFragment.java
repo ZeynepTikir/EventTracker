@@ -32,7 +32,7 @@ public class SettingsFragment extends Fragment {
 
     private RadioGroup themeRadioGroup;
     private RadioButton radioLight, radioDark;
-    private Spinner languageSpinner;
+    private Spinner languageSpinner, durationSpinner;
     private SwitchMaterial notificationSwitch;
     private Button clearDataButton;
     private TextView settingsTitle;
@@ -56,6 +56,7 @@ public class SettingsFragment extends Fragment {
         notificationSwitch = view.findViewById(R.id.notificationSwitch);
         clearDataButton = view.findViewById(R.id.clearDataButton);
         settingsTitle = view.findViewById(R.id.settingsTitle);
+        durationSpinner = view.findViewById(R.id.durationSpinner);
 
         // Önceki tema ayarını yükle
         boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
@@ -114,6 +115,37 @@ public class SettingsFragment extends Fragment {
                     sharedPreferences.edit().putString("language", langCode).apply();
                     updateLocale(langCode);
                 }
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) {}
+        });
+
+        // Pomodoro Süre seçeneklerini tanımla (dakika cinsinden)
+        String[] durations = {"15 min", "20 min", "25 min", "30 min", "45 min", "60 min"};
+        ArrayAdapter<String> durationAdapter = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_spinner_item, durations);
+        durationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        durationSpinner.setAdapter(durationAdapter);
+
+        // Pomodoro Süre ayarını yükle
+        int savedDuration = sharedPreferences.getInt("pomodoro_duration", 25); // default 25 dk
+        int spinnerIndex = 2; // default olarak 25 min seçili
+        for (int i = 0; i < durations.length; i++) {
+            if (durations[i].startsWith(String.valueOf(savedDuration))) {
+                spinnerIndex = i;
+                break;
+            }
+        }
+        durationSpinner.setSelection(spinnerIndex);
+
+        // Pomodoro Süre Spinner seçimi dinleyici
+        durationSpinner.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                String selected = durations[position];
+                int minutes = Integer.parseInt(selected.split(" ")[0]); // "25 min" → 25
+                sharedPreferences.edit().putInt("pomodoro_duration", minutes).apply();
             }
 
             @Override

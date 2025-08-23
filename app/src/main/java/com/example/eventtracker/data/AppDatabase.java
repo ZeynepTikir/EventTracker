@@ -7,17 +7,19 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.eventtracker.data.dao.PomodoroDao;
 import com.example.eventtracker.data.dao.TaskDao;
+import com.example.eventtracker.data.model.PomodoroEntity;
 import com.example.eventtracker.data.model.TaskEntity;
 
-@Database(entities = {TaskEntity.class, }, version = 5, exportSchema = false)
+@Database(entities = {TaskEntity.class, PomodoroEntity.class}, version = 7, exportSchema = false)
 
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
 
     public abstract TaskDao taskDao();
-
+    public abstract PomodoroDao pomodoroDao(); // pomodoro dao ekledik
 
     public static AppDatabase getInstance(final Context context) {
         if (INSTANCE == null) {
