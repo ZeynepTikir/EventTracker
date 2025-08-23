@@ -23,6 +23,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.eventtracker.R;
 import com.example.eventtracker.data.model.TaskEntity;
+import com.example.eventtracker.utils.AlarmHelper;
 import com.example.eventtracker.viewmodel.TaskViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -104,7 +105,13 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment
             task.setTime(time);
             task.setIcon(getResources().getResourceEntryName(selectedIconResId));
 
+            // Veritabanını güncelle
             taskViewModel.update(task);
+
+            // Alarmı güncelle: eski alarm iptal edilir, yeni tarih-saat ile kurulur
+            AlarmHelper.updateTaskReminder(requireContext(), task);
+
+            //Toast.makeText(getContext(), getString(R.string.toast_task_updated), Toast.LENGTH_SHORT).show();
             dismiss();
         });
 
@@ -114,12 +121,17 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment
                     .setTitle(getString(R.string.delete_task))
                     .setMessage(getString(R.string.delete_task_confirm))
                     .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                        // Alarmı iptal et
+                        AlarmHelper.cancelTaskReminder(requireContext(), task);
+
+                        // Görevi sil
                         taskViewModel.delete(task);
                         dismiss();
                     })
                     .setNegativeButton(getString(R.string.cancel), null)
                     .show();
         });
+
 
 
         return view;

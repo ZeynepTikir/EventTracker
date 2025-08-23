@@ -47,4 +47,28 @@ public class AlarmHelper {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
         }
     }
+
+    public static void updateTaskReminder(Context context, TaskEntity task) {
+        // Mevcut alarmı iptal et
+        cancelTaskReminder(context, task);
+
+        // Yeni tarih-saat ile alarmı kur
+        scheduleTaskReminder(context, task);
+    }
+
+    public static void cancelTaskReminder(Context context, TaskEntity task) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                task.getId(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+        }
+    }
+
 }
