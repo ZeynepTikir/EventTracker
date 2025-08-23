@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.data.repository.TaskRepository;
+import com.example.eventtracker.utils.AlarmHelper;
 
 import java.util.List;
 
@@ -21,9 +22,7 @@ public class TaskViewModel extends AndroidViewModel {
         allTasks = repository.getAllTasks();
     }
 
-    public void insert(TaskEntity task) {
-        repository.insert(task);
-    }
+    public long insert(TaskEntity task) { return repository.insert(task); }
 
     public void update(TaskEntity task) {
         repository.update(task);

@@ -24,6 +24,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.eventtracker.R;
 import com.example.eventtracker.data.model.TaskEntity;
+import com.example.eventtracker.utils.AlarmHelper;
 import com.example.eventtracker.viewmodel.TaskViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
@@ -91,7 +92,14 @@ public class NewTaskBottomSheetFragment extends BottomSheetDialogFragment
             task.setIcon(getResources().getResourceEntryName(selectedIconResId));
             task.setChecked(false);
 
-            taskViewModel.insert(task);
+            // Veritabanına kaydet
+            // taskViewModel.insert(task);
+
+            long id = taskViewModel.insert(task);
+            task.setId((int) id);
+            // Alarm kur
+            AlarmHelper.scheduleTaskReminder(requireContext(), task);
+
 
             Toast.makeText(getContext(), getString(R.string.toast_task_added), Toast.LENGTH_SHORT).show();
             dismiss();

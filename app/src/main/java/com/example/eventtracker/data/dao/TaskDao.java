@@ -11,7 +11,7 @@ import java.util.List;
 public interface TaskDao {
 
     @Insert
-    void insert(TaskEntity task);
+    long insert(TaskEntity task);
 
     @Update
     void update(TaskEntity task);
@@ -24,6 +24,10 @@ public interface TaskDao {
 
     @Query("SELECT * FROM tasks ORDER BY time ASC")
     LiveData<List<TaskEntity>> getAllTasks();
+
+    @Query("SELECT * FROM tasks ORDER BY time ASC")
+    List<TaskEntity> getAllTasksSync();  // LiveData değil, direkt liste döner
+
 
     @Query("SELECT * FROM tasks WHERE date = :date ORDER BY time ASC")
     LiveData<List<TaskEntity>> getTasksByDate(String date);

@@ -11,6 +11,10 @@ import com.example.eventtracker.data.model.TaskEntity;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import android.util.Log;
 
 public class TaskRepository {
     private final TaskDao taskDao;
@@ -22,8 +26,16 @@ public class TaskRepository {
         executorService = Executors.newSingleThreadExecutor();
     }
 
-    public void insert(TaskEntity task) {
-        executorService.execute(() -> taskDao.insert(task));
+
+    public long insert(TaskEntity task) {
+        Callable<Long> callable = () -> taskDao.insert(task);
+        Future<Long> future = executorService.submit(callable);
+        try {
+            return future.get(); // DB insert tamamlanana kadar bekler ve id döner
+        } catch (ExecutionException | InterruptedException e) {
+            Log.e("TaskRepository", "Failed to insert task", e);
+            return -1;
+        }
     }
 
     public void update(TaskEntity task) {
