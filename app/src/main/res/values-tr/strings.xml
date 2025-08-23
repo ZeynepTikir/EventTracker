@@ -31,6 +31,7 @@
     <string name="update_button">Güncelle</string>
     <string name="delete">Sil</string>
 
+    <string name="toast_task_updated">Görev Güncellendi</string>
     <string name="fill_all_fields">Lütfen tüm alanları doldurun</string>
     <string name="delete_task">Görevi Sil</string>
     <string name="delete_task_confirm">Bu görevi silmek istediğinize emin misiniz?</string>
@@ -49,6 +50,10 @@
     <string name="clear_app_data">Uygulama Verilerini Temizle</string>
     <string name="clear_app_data_message">Tüm uygulama verilerini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.</string>
     <string name="app_data_cleared">Uygulama verileri silindi</string>
+
+    <!-- Alarm Receiver -->
+    <string name="notification_task_title">Görev Bildirimi</string>
+    <string name="notification_task_text">Bu saatte: %1$s</string>
 
     <!-- Item Event -->
     <string name="event_name">Etkinlik Adı</string>

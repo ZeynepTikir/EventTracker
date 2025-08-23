@@ -23,6 +23,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.eventtracker.MainActivity;
 import com.example.eventtracker.R;
+import com.example.eventtracker.utils.LocaleHelper;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Locale;
@@ -143,6 +144,9 @@ public class SettingsFragment extends Fragment {
         Configuration config = new Configuration();
         config.setLocale(locale);
         requireContext().getResources().updateConfiguration(config, requireContext().getResources().getDisplayMetrics());
+
+        // LocaleHelper kullanarak kaydet ve güncelle
+        LocaleHelper.setLocale(requireContext(), langCode);
 
         // Activity yeniden başlat
         requireActivity().recreate();

@@ -111,7 +111,7 @@ public class EditTaskBottomSheetFragment extends BottomSheetDialogFragment
             // Alarmı güncelle: eski alarm iptal edilir, yeni tarih-saat ile kurulur
             AlarmHelper.updateTaskReminder(requireContext(), task);
 
-            //Toast.makeText(getContext(), getString(R.string.toast_task_updated), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getString(R.string.toast_task_updated), Toast.LENGTH_SHORT).show();
             dismiss();
         });
 

@@ -31,6 +31,7 @@
     <string name="update_button">Actualizar</string>
     <string name="delete">Eliminar</string>
 
+    <string name="toast_task_updated">Tarea Actualizada</string>
     <string name="fill_all_fields">Por favor complete todos los campos</string>
     <string name="delete_task">Eliminar Tarea</string>
     <string name="delete_task_confirm">¿Está seguro de que desea eliminar esta tarea?</string>
@@ -49,6 +50,10 @@
     <string name="clear_app_data">Borrar Datos de la App</string>
     <string name="clear_app_data_message">¿Está seguro de que desea borrar todos los datos de la app? Esta acción no se puede deshacer.</string>
     <string name="app_data_cleared">Datos de la app borrados</string>
+
+    <!-- Alarm Receiver -->
+    <string name="notification_task_title">Recordatorio de Tarea</string>
+    <string name="notification_task_text">Es hora de: %1$s</string>
 
     <!-- Item Event -->
     <string name="event_name">Nombre del Evento</string>
