@@ -53,10 +53,10 @@ public class SettingsFragment extends Fragment {
         radioLight = view.findViewById(R.id.radioLight);
         radioDark = view.findViewById(R.id.radioDark);
         languageSpinner = view.findViewById(R.id.languageSpinner);
+        durationSpinner = view.findViewById(R.id.durationSpinner);
         notificationSwitch = view.findViewById(R.id.notificationSwitch);
         clearDataButton = view.findViewById(R.id.clearDataButton);
         settingsTitle = view.findViewById(R.id.settingsTitle);
-        durationSpinner = view.findViewById(R.id.durationSpinner);
 
         // Önceki tema ayarını yükle
         boolean isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
@@ -115,6 +115,7 @@ public class SettingsFragment extends Fragment {
                     sharedPreferences.edit().putString("language", langCode).apply();
                     updateLocale(langCode);
                 }
+                updateSpinnerColors(languageSpinner, isDarkMode);
             }
 
             @Override
@@ -146,6 +147,7 @@ public class SettingsFragment extends Fragment {
                 String selected = durations[position];
                 int minutes = Integer.parseInt(selected.split(" ")[0]); // "25 min" → 25
                 sharedPreferences.edit().putInt("pomodoro_duration", minutes).apply();
+                updateSpinnerColors(durationSpinner, isDarkMode);
             }
 
             @Override
@@ -204,6 +206,10 @@ public class SettingsFragment extends Fragment {
         root.setBackgroundColor(bgColor);
         setTextColorsRecursively(root, textColor);
 
+        // Spinner renklerini güncelle
+        updateSpinnerColors(languageSpinner, darkMode);
+        updateSpinnerColors(durationSpinner, darkMode);
+
         clearDataButton.setBackgroundTintList(ColorStateList.valueOf(buttonColor));
         clearDataButton.setTextColor(buttonTextColor);
     }
@@ -216,6 +222,15 @@ public class SettingsFragment extends Fragment {
             for (int i = 0; i < group.getChildCount(); i++) {
                 setTextColorsRecursively(group.getChildAt(i), textColor);
             }
+        }
+    }
+
+    private void updateSpinnerColors(Spinner spinner, boolean darkMode) {
+        TextView selectedView = (TextView) spinner.getSelectedView();
+        if (selectedView != null) {
+            int textColor = darkMode ? getResources().getColor(R.color.dark_textcolor, null)
+                    : getResources().getColor(R.color.textcolor, null);
+            selectedView.setTextColor(textColor);
         }
     }
 }
