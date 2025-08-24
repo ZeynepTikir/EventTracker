@@ -1,32 +1,32 @@
 package com.example.eventtracker.data.model;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import androidx.room.ColumnInfo;
 
-@Entity(tableName = "pomodoros")
-public class PomodoroEntity {
+public class PomodoroWithTaskName {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    public int id;
+    public int taskId;
 
-    private int taskId;       // Hangi görev için
-    private long duration;    // Geçen süre (ms)
-    private boolean completed;
-    private long timestamp;   // Kaydedildiği zaman
+    @ColumnInfo(name = "taskName")
+    public String taskName;
 
-    public PomodoroEntity(int taskId, long duration, boolean completed, long timestamp) {
-        this.taskId = taskId;
-        this.duration = duration;
-        this.completed = completed;
-        this.timestamp = timestamp;
-    }
+    public long duration;
+    public boolean completed;
+    public long timestamp;
 
-    // Getter & Setter
+    // Boş constructor
+    public PomodoroWithTaskName() {}
+
+    // İstersen getter/setter ekleyebilirsin
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
     public int getTaskId() { return taskId; }
     public void setTaskId(int taskId) { this.taskId = taskId; }
+
+    public String getTaskName() { return taskName; }
+    public void setTaskName(String taskName) { this.taskName = taskName; }
+
     public long getDuration() { return duration; }
     public void setDuration(long duration) { this.duration = duration; }
 

@@ -25,6 +25,9 @@ public interface TaskDao {
     @Query("SELECT * FROM tasks ORDER BY time ASC")
     LiveData<List<TaskEntity>> getAllTasks();
 
+    @Query("SELECT * FROM tasks WHERE checked = 0 ORDER BY time ASC")
+    LiveData<List<TaskEntity>> getActiveUncheckedTasks();
+
     @Query("SELECT * FROM tasks ORDER BY time ASC")
     List<TaskEntity> getAllTasksSync();  // LiveData değil, direkt liste döner
 
@@ -33,8 +36,14 @@ public interface TaskDao {
     LiveData<List<TaskEntity>> getTasksByDate(String date);
 
 
-    @Query("UPDATE tasks SET checked = :checked WHERE id = :id")
-    void updateChecked(int id, boolean checked);
+    @Query("UPDATE tasks SET checked = :checked, completedTimestamp = :completedTimestamp WHERE id = :id")
+    void updateChecked(int id, boolean checked, long completedTimestamp);
 
+    @Query("SELECT COUNT(*) FROM tasks WHERE checked = 1")
+    LiveData<Integer> getCompletedTaskCount();
+
+    // Son tamamlanan tasklar: timestamp sırasına göre
+    @Query("SELECT * FROM tasks WHERE checked = 1 ORDER BY completedTimestamp DESC LIMIT :limit")
+    List<TaskEntity> getRecentCompletedTasks(int limit);
 
 }

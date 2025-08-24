@@ -7,8 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:paddingTop="48dp"
-    android:paddingHorizontal="4dp"
-    android:paddingBottom="20dp">
+    android:paddingHorizontal="4dp">
 
     <!-- Başlık -->
     <TextView

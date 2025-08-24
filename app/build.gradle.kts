@@ -42,6 +42,9 @@ dependencies {
 
     implementation("androidx.core:core:1.10.1")
 
+    // MPAndroidChart
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
 
     // Room runtime
     implementation("androidx.room:room-runtime:2.7.2")

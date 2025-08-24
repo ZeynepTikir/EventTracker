@@ -77,6 +77,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         // Checked değişimini DB'ye yansıt
         holder.checked.setOnCheckedChangeListener((buttonView, isChecked) -> {
             task.setChecked(isChecked);
+            task.setCompletedTimestamp(System.currentTimeMillis());
             taskViewModel.update(task); // Room DB güncellemesi
 
             // Context'i al

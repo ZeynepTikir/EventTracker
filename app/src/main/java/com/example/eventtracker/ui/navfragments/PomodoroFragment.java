@@ -25,6 +25,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.eventtracker.R;
 import com.example.eventtracker.data.model.PomodoroEntity;
+import com.example.eventtracker.data.model.PomodoroWithTaskName;
 import com.example.eventtracker.data.model.TaskEntity;
 import com.example.eventtracker.data.AppDatabase;
 import com.example.eventtracker.viewmodel.TaskViewModel;
@@ -80,12 +81,30 @@ public class PomodoroFragment extends Fragment {
         pauseBtn.setOnClickListener(v -> pauseTimer());
         resetBtn.setOnClickListener(v -> resetTimer());
 
+        // 🔽 BURAYA DB LOG KOMUTU EKLİYORUZ
+        // DB log kısmı
+        new Thread(() -> {
+            List<PomodoroWithTaskName> pomodoros = AppDatabase
+                    .getInstance(requireContext())
+                    .pomodoroDao()
+                    .getRecentPomodorosWithTaskName(); // POJO kullanılıyor
+
+            for (PomodoroWithTaskName p : pomodoros) {
+                Log.d(TAG, "Pomodoro: taskId=" + p.getTaskId()
+                        + ", name=" + p.getTaskName()
+                        + ", duration=" + p.getDuration()
+                        + ", completed=" + p.isCompleted()
+                        + ", timestamp=" + p.getTimestamp());
+            }
+        }).start();
+
+
         //Log.d(TAG, "PomodoroFragment initialized with duration=" + selectedDuration + "ms");
         return view;
     }
 
     private void setupTaskSpinner() {
-        taskViewModel.getAllTasks().observe(getViewLifecycleOwner(), tasks -> {
+        taskViewModel.getActiveUncheckedTasks().observe(getViewLifecycleOwner(), tasks -> {
             taskList = tasks;
             if (tasks != null) {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
@@ -137,7 +156,7 @@ public class PomodoroFragment extends Fragment {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
         int minutes = prefs.getInt("pomodoro_duration", 25); // default 25dk
         selectedDuration = minutes * 60 * 1000L;
-        Log.d(TAG, "Loaded Pomodoro duration from settings: " + minutes + " min");
+        // Log.d(TAG, "Loaded Pomodoro duration from settings: " + minutes + " min");
     }
 
     private void startTimer() {
@@ -201,9 +220,9 @@ public class PomodoroFragment extends Fragment {
         long duration = selectedDuration - timeLeftInMillis;
         long timestamp = System.currentTimeMillis();
 
+        // PomodoroEntity artık sadece taskId ile ilişkili
         PomodoroEntity pomodoro = new PomodoroEntity(
-                selectedTask.getId(),
-                selectedTask.getName(),
+                selectedTask.getId(), // taskId
                 duration,
                 completed,
                 timestamp
@@ -213,9 +232,11 @@ public class PomodoroFragment extends Fragment {
             AppDatabase.getInstance(requireContext())
                     .pomodoroDao()
                     .insert(pomodoro);
-            Log.d(TAG, "Pomodoro saved: task=" + selectedTask.getName() + ", duration=" + duration + "ms, completed=" + completed);
+            Log.d(TAG, "Pomodoro saved: taskId=" + selectedTask.getId()
+                    + ", duration=" + duration + "ms, completed=" + completed);
         }).start();
     }
+
 
     private void updateTimerText() {
         int minutes = (int) (timeLeftInMillis / 1000) / 60;

@@ -43,7 +43,8 @@ public class TaskRepository {
     }
 
     public void updateChecked(int id, boolean checked) {
-        executorService.execute(() -> taskDao.updateChecked(id, checked));
+        long timestamp = checked ? System.currentTimeMillis() : 0L;
+        executorService.execute(() -> taskDao.updateChecked(id, checked, timestamp));
     }
 
 
@@ -53,6 +54,12 @@ public class TaskRepository {
 
     public LiveData<List<TaskEntity>> getAllTasks() {
         return taskDao.getAllTasks();
+    }
+
+
+    // 🔹 Yeni fonksiyon
+    public LiveData<List<TaskEntity>> getActiveUncheckedTasks() {
+        return taskDao.getActiveUncheckedTasks();
     }
 
     public LiveData<List<TaskEntity>> getTodayTasks(String todayDate) {

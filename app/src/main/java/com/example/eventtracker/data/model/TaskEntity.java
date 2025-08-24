@@ -16,6 +16,8 @@ public class TaskEntity {
     private String date;  // Format: "yyyy-MM-dd"
     @ColumnInfo(name = "checked")
     private boolean checked;
+    @ColumnInfo(name = "completedTimestamp")
+    private long completedTimestamp; // 0 = tamamlanmadı, diğer sayılar tamamlandı ve zaman milis cinsinden
 
     public boolean isChecked() {
         return checked;
@@ -66,5 +68,6 @@ public class TaskEntity {
         this.date = date;
     }
 
-
+    public long getCompletedTimestamp() { return completedTimestamp; }
+    public void setCompletedTimestamp(long completedTimestamp) { this.completedTimestamp = completedTimestamp; }
 }

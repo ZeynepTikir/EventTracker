@@ -36,6 +36,10 @@ public class TaskViewModel extends AndroidViewModel {
         return allTasks;
     }
 
+    public LiveData<List<TaskEntity>> getActiveUncheckedTasks() {
+        return repository.getActiveUncheckedTasks();
+    }
+
     public LiveData<List<TaskEntity>> getTodayTasks(String todayDate) {
         return repository.getTodayTasks(todayDate);
     }

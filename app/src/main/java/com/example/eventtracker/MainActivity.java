@@ -22,6 +22,7 @@ import com.example.eventtracker.ui.navfragments.CalendarFragment;
 import com.example.eventtracker.ui.navfragments.HomeFragment;
 import com.example.eventtracker.ui.navfragments.PomodoroFragment;
 import com.example.eventtracker.ui.navfragments.SettingsFragment;
+import com.example.eventtracker.ui.navfragments.StatsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Locale;
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
             selected = new SettingsFragment();
         }else if (id == R.id.navigation_pomodoro) {
             selected = new PomodoroFragment();
+        }else if (id == R.id.navigation_stats) {
+            selected = new StatsFragment();
         }
         if (selected != null) {
             getSupportFragmentManager()

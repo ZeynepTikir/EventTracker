@@ -17,6 +17,15 @@
         <string name="selected_day">Selected Day: %s</string>
         <string name="selected_day_format">%1$d/%2$d/%3$d</string>
 
+        <!-- StatsFragment -->
+        <string name="stats_title">Stats</string>
+        <string name="completed_tasks">Completed Tasks</string>"
+        <string name="total_pomodoros">Total Pomodoros</string>
+        <string name="focus_time">Focus Time</string>
+        <string name="weekly_stats">Weekly Stats</string>
+        <string name="recent_activity">Recent Activity</string>
+        <string name="recent_task_item">Completed</string>
+        <string name="recent_pomodoro_item">Pomodoro: %2$d min</string>
 
         <!-- HomeFragment -->
         <string name="home_today">Today</string>
@@ -74,6 +83,6 @@
         <string name="nav_home">Home</string>
         <string name="nav_pomodoro">Pomodoro</string>
         <string name="nav_calendar">Calendar</string>
-        <string name="nav_habits">Habits</string>
+        <string name="nav_stats">Stats</string>
         <string name="nav_settings">Settings</string>
 </resources>
