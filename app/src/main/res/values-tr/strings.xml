@@ -17,6 +17,16 @@
     <string name="selected_day">Seçilen Gün: %s</string>
     <string name="selected_day_format">%1$d/%2$d/%3$d</string>
 
+    <!-- StatsFragment -->
+    <string name="stats_title">İstatistikler</string>
+    <string name="completed_tasks">Tamamlanan Görevler</string>
+    <string name="total_pomodoros">Toplam Pomodoro</string>
+    <string name="focus_time">Odaklanma Süresi</string>
+    <string name="weekly_stats">Haftalık İstatistikler</string>
+    <string name="recent_activity">Son Etkinlikler</string>
+    <string name="recent_task_item">Tamamlandı</string>
+    <string name="recent_pomodoro_item">Pomodoro: %2$d dk</string>
+
     <!-- HomeFragment -->
     <string name="home_today">Bugün</string>
 
@@ -72,7 +82,7 @@
     <string name="nav_home">Ana Sayfa</string>
     <string name="nav_pomodoro">Pomodoro</string>
     <string name="nav_calendar">Takvim</string>
-    <string name="nav_habits">Alışkanlıklar</string>
+    <string name="nav_stats">İstatistikler</string>
     <string name="nav_settings">Ayarlar</string>
 </resources>
 

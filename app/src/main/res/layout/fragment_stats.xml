@@ -32,6 +32,7 @@
         android:layout_marginBottom="16dp">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardCompletedTasks"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -55,18 +56,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
+                    android:textColor="@color/textcolor"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/completed_tasks"
+                    android:textColor="@color/textcolor"
                     android:textSize="12sp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardTotalPomodoros"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -90,17 +95,21 @@
                     android:layout_height="wrap_content"
                     android:text=""
                     android:textSize="20sp"
+                    android:textColor="@color/textcolor"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/total_pomodoros"
+                    android:textColor="@color/textcolor"
                     android:textSize="12sp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardFocusTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -123,13 +132,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=""
+                    android:textColor="@color/textcolor"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/focus_time"
+                    android:textColor="@color/textcolor"
                     android:textSize="12sp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -142,6 +154,7 @@
         android:text="@string/weekly_stats"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:textColor="@color/textcolor"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="8dp"/>
 
@@ -160,10 +173,12 @@
         android:text="@string/recent_activity"
         android:textSize="16sp"
         android:textStyle="bold"
+        android:textColor="@color/textcolor"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="8dp"/>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardRecentActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"

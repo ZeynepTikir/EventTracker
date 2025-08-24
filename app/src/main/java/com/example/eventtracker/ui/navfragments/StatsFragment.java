@@ -1,5 +1,7 @@
 package com.example.eventtracker.ui.navfragments;
 
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,6 +48,7 @@ public class StatsFragment extends Fragment {
     private RecyclerView recyclerRecentActivity;
     private RecentActivityAdapter adapter;
     private BarChart barChart;
+    private boolean isDarkMode;
 
     @Nullable
     @Override
@@ -52,6 +56,13 @@ public class StatsFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_stats, container, false);
+
+        // Tema durumu
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        isDarkMode = sharedPreferences.getBoolean("dark_mode", false);
+
+        // Renkleri uygula
+        applyThemeColors(view, isDarkMode);
 
         tvCompletedTasks = view.findViewById(R.id.tvCompletedTasks);
         tvTotalPomodoros = view.findViewById(R.id.tvTotalPomodoros);
@@ -158,6 +169,89 @@ public class StatsFragment extends Fragment {
 
             requireActivity().runOnUiThread(() -> adapter.updateData(allActivities));
         }).start();
+    }
+
+    private void applyThemeColors(View root, boolean darkMode) {
+        int bgColor = darkMode
+                ? getResources().getColor(R.color.dark_background, null)
+                : getResources().getColor(R.color.background, null);
+
+        int textColor = darkMode
+                ? getResources().getColor(R.color.dark_textcolor, null)
+                : getResources().getColor(R.color.textcolor, null);
+
+        int cardColor = darkMode
+                ? getResources().getColor(R.color.dark_cardBackground, null)
+                : getResources().getColor(R.color.cardBackground, null);
+
+        int dividerColor = darkMode
+                ? getResources().getColor(R.color.dark_cancelColor, null)
+                : getResources().getColor(R.color.cancelColor, null);
+
+        // Arka plan
+        root.setBackgroundColor(bgColor);
+
+        // Tüm TextView'ler için yazı rengini uygula
+        setTextColorsRecursively(root, textColor);
+
+        // CardView arka planlarını uygula
+        int[] cardIds = {
+                R.id.cardCompletedTasks,
+                R.id.cardTotalPomodoros,
+                R.id.cardFocusTime,
+                R.id.chartContainer,
+                R.id.cardRecentActivity
+        };
+        for (int id : cardIds) {
+            View v = root.findViewById(id);
+            if (v != null) {
+                v.setBackgroundTintList(ColorStateList.valueOf(cardColor));
+            }
+        }
+
+        // item_recent_activity özel ayarlar:
+        RecyclerView recycler = root.findViewById(R.id.recyclerRecentActivity);
+        if (recycler != null) {
+            recycler.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+                @Override
+                public void onChildViewAttachedToWindow(@NonNull View view) {
+                    TextView tvTitle = view.findViewById(R.id.tvTitle);
+                    if (tvTitle != null) {
+                        tvTitle.setTextColor(textColor);
+                    }
+
+                    TextView tvTime = view.findViewById(R.id.tvTime);
+                    if (tvTime != null) {
+                        tvTime.setTextColor(textColor);
+                    }
+
+                    TextView tvDescription = view.findViewById(R.id.tvDescription);
+                    if (tvDescription != null) {
+                        tvDescription.setTextColor(textColor);
+
+                        int descBg = darkMode
+                                ? getResources().getColor(R.color.cancelColor, null)
+                                : getResources().getColor(R.color.dark_textcolor, null);
+                        tvDescription.setBackgroundTintList(ColorStateList.valueOf(descBg));
+                    }
+                }
+
+                @Override
+                public void onChildViewDetachedFromWindow(@NonNull View view) {}
+            });
+        }
+    }
+
+    // 🔽 Recursive text color setter
+    private void setTextColorsRecursively(View view, int textColor) {
+        if (view instanceof TextView) {
+            ((TextView) view).setTextColor(textColor);
+        } else if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int i = 0; i < group.getChildCount(); i++) {
+                setTextColorsRecursively(group.getChildAt(i), textColor);
+            }
+        }
     }
 
 
