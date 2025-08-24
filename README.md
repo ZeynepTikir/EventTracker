@@ -1,6 +1,6 @@
 # EventTracker 📅✅
 
-EventTracker is an Android app that helps users manage their daily tasks and pomodoro sessions efficiently. It combines task tracking and productivity analytics in a clean, user-friendly interface.
+EventTracker is an Android app that helps users manage their daily tasks and pomodoro sessions efficiently. It combines task tracking, productivity analytics, and notifications in a clean, user-friendly interface.
 
 ## Features
 
@@ -16,6 +16,10 @@ EventTracker is an Android app that helps users manage their daily tasks and pom
   - Weekly statistics for tasks and pomodoros.
   - Charts dynamically display integers and hide zero values.
   - Theme-aware colors for charts and UI elements.
+ 
+- **Notifications**
+  - Reminders for upcoming tasks and pomodoro sessions.
+  - Helps maintain focus and productivity throughout the day.
 
 - **Localization**
   - Supports multiple languages: English, Turkish, Spanish.
