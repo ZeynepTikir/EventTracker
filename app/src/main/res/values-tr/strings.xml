@@ -27,6 +27,21 @@
     <string name="recent_task_item">Tamamlandı</string>
     <string name="recent_pomodoro_item">Pomodoro: %2$d dk</string>
 
+    <!-- Weekly Chart -->
+    <string name="tasks_label">Görevler</string>
+    <string name="completed_label">Tamamlanan</string>
+    <string name="remaining_label">Kalan</string>
+    <string name="pomodoro_label">Pomodoro (dk)</string>
+
+    <!-- Days of Week -->
+    <string name="mon">Pzt</string>
+    <string name="tue">Sal</string>
+    <string name="wed">Çar</string>
+    <string name="thu">Per</string>
+    <string name="fri">Cum</string>
+    <string name="sat">Cmt</string>
+    <string name="sun">Paz</string>
+
     <!-- HomeFragment -->
     <string name="home_today">Bugün</string>
 

@@ -12,6 +12,9 @@
     <color name="cancelColor">#545454</color>
     <color name="calendarHeaderBackground">#E0E0E0</color>
 
+    <color name="chartColor1">#957BD9</color>
+    <color name="chartColor2">#BABABA</color>
+
     <!-- dark theme -->
     <color name="dark_background">#1B1B1B</color>
     <color name="dark_cardBackground">#424242</color>

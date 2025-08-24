@@ -147,7 +147,7 @@
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
-    <!-- Grafikler -->
+    <!-- Haftalık istatistik başlığı -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -158,13 +158,80 @@
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="8dp"/>
 
-    <FrameLayout
-        android:id="@+id/chartContainer"
+    <!-- Seçim düğmeleri -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/btnShowTasks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/tasks_label"
+            android:textSize="14sp"
+            android:textColor="@color/textcolor"
+            android:background="@drawable/rounded_edittext"
+            android:backgroundTint="@color/dark_cancelColor"/>
+
+        <TextView
+            android:id="@+id/btnShowPomodoro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/pomodoro_label"
+            android:textSize="14sp"
+            android:textColor="@color/textcolor"
+            android:background="@drawable/rounded_edittext"
+            android:backgroundTint="@color/dark_cancelColor"/>
+    </LinearLayout>
+
+    <!-- Task Grafiği -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardTaskChart"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@color/cardBackground"
         android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        android:backgroundTint="@color/cardBackground">
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chartTasks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Pomodoro Grafiği -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardPomodoroChart"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        android:backgroundTint="@color/cardBackground"
+        android:visibility="gone">
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chartPomodoro"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </androidx.cardview.widget.CardView>
+
 
     <!-- Son Görevler/Pomodorolar -->
     <TextView

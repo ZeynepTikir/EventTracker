@@ -27,6 +27,21 @@
         <string name="recent_task_item">Completed</string>
         <string name="recent_pomodoro_item">Pomodoro: %2$d min</string>
 
+        <!-- Weekly Chart -->
+        <string name="tasks_label">Tasks</string>
+        <string name="completed_label">Completed</string>
+        <string name="remaining_label">Remaining</string>
+        <string name="pomodoro_label">Pomodoro (min)</string>
+
+        <!-- Days of Week -->
+        <string name="mon">Mon</string>
+        <string name="tue">Tue</string>
+        <string name="wed">Wed</string>
+        <string name="thu">Thu</string>
+        <string name="fri">Fri</string>
+        <string name="sat">Sat</string>
+        <string name="sun">Sun</string>
+
         <!-- HomeFragment -->
         <string name="home_today">Today</string>
 
