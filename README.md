@@ -1,23 +1,42 @@
 # EventTracker 📅✅
 
-EventTracker is a modern and user-friendly Android app designed for task and habit management.
+EventTracker is an Android app that helps users manage their daily tasks and pomodoro sessions efficiently. It combines task tracking and productivity analytics in a clean, user-friendly interface.
 
 ## Features
 
-- 📝 Add and edit tasks and habits
-- ⏰ Set reminder times
-- 📊 Statistics and analytics screens (in development)
-- 🕹️ Pomodoro timer (planned)
-- 📅 Calendar view (planned)
-- 🧾 Interactive editing with BottomSheet dialogs
-- ✅ Daily task and habit lists
+- **Tasks**
+  - Add, complete, and view tasks.
+  - Tasks are shown in a weekly stacked bar chart (completed vs remaining).
 
-## Screens
+- **Pomodoro**
+  - Track pomodoro sessions with duration.
+  - Weekly line chart showing total minutes spent per day.
 
-- Home (Tasks and Habits overview)
-- Add / Edit Task
-- Add / Edit Habit
-- Calendar, Pomodoro, and Settings (coming soon)
+- **Stats**
+  - Weekly statistics for tasks and pomodoros.
+  - Charts dynamically display integers and hide zero values.
+  - Theme-aware colors for charts and UI elements.
+
+- **Localization**
+  - Supports multiple languages: English, Turkish, Spanish.
+
+- **UI/UX**
+  - Bottom navigation for easy access: Home, Pomodoro, Calendar, Stats, Settings.
+  - Responsive card-based layout.
+  - Dark/light theme support.
+
+## Screenshots
+
+*(Not added yet)*
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/EventTracker.git
+2. Open in Android Studio.
+
+3. Build and run on an Android device/emulator.
 
 ## Technologies
 
@@ -26,6 +45,6 @@ EventTracker is a modern and user-friendly Android app designed for task and hab
 - Room Database
 - MVVM Architecture
 
----
+## License
 
-📌 This project is currently under active development.
+This project is licensed under the MIT License.
