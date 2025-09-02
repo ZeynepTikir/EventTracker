@@ -31,7 +31,10 @@ EventTracker is an Android app that helps users manage their daily tasks and pom
 
 ## Screenshots
 
-*(Not added yet)*
+<img width="733" height="417" alt="image" src="https://github.com/user-attachments/assets/4f4c4e3b-7ebe-4db2-a63b-0eebb51bfad2" />
+<img width="724" height="417" alt="image" src="https://github.com/user-attachments/assets/a6c7bbf6-0dbd-4a3d-978e-11d76a538b3a" />
+<img width="763" height="417" alt="image" src="https://github.com/user-attachments/assets/5ae160e5-6d1e-49d1-890a-ff82905aa8ca" />
+
 
 ## Installation
 
